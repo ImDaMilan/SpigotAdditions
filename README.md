@@ -26,8 +26,8 @@ No need to register the listener or put it in a class that implements Listener, 
 )  
 public class TestCommand {  
   public static boolean execute(CommandSender sender, Command command, String label, String[] args) {  
-	  sender.sendMessage("Test command executed!");
-	  return true;
+	sender.sendMessage("Test command executed!");
+	return true;
  }}
 ```
 Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out!
@@ -114,7 +114,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>NEWEST</version>
+	<version>0.1.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -126,6 +126,6 @@ repositories {
 ```
 ```
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:Tag'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:0.1.2'
 }
 ```
