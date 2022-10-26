@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class InventoryGUI implements Listener {
@@ -90,6 +91,52 @@ public class InventoryGUI implements Listener {
         for (int i = start; i < end; i++) {
             inventory.setItem(i, item);
         }
+    }
+
+    /**
+     * Adds all the given items to the inventory.
+     * @param items The items to add.
+     */
+    public void addItems(ItemStack... items) {
+        for (ItemStack item : items) {
+            inventory.addItem(item);
+        }
+    }
+
+    /**
+     * Adds all the items in the given collection to the inventory.
+     * @param items The items to add.
+     */
+    public void addItems(Collection<ItemStack> items) {
+        for (ItemStack item : items) {
+            inventory.addItem(item);
+        }
+    }
+
+    /**
+     * Adds the given item to the inventory in the given slot.
+     * @param slot The slot to add the item to.
+     * @param item The item to add.
+     */
+    public void addItem(int slot, ItemStack item) {
+        inventory.setItem(slot, item);
+    }
+
+    /**
+     * Adds the given item to the inventory in the given slot.
+     * @param slot The slot to add the item to.
+     * @param item The item to add.
+     */
+    public void addItem(ItemStack item, int slot) {
+        inventory.setItem(slot, item);
+    }
+
+    /**
+     * Adds the given item to the inventory in the first available slot.
+     * @param item The item to add.
+     */
+    public void addItem(ItemStack item) {
+        inventory.addItem(item);
     }
 
     /**

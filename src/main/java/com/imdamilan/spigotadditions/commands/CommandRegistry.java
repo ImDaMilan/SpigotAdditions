@@ -60,5 +60,4 @@ public class CommandRegistry {
             commandMap.register(command.getLabel(), command);
         }
     }
-
 }

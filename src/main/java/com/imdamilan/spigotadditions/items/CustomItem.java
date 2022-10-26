@@ -1,4 +1,4 @@
-package com.imdamilan.spigotadditions.inventories;
+package com.imdamilan.spigotadditions.items;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;

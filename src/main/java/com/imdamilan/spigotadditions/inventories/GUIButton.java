@@ -10,7 +10,7 @@ public abstract class GUIButton {
 
     private final @Getter ItemStack item;
 
-    private GUIButton(ItemStack item) {
+    protected GUIButton(ItemStack item) {
         this.item = item;
     }
 
