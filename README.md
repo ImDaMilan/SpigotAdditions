@@ -5,7 +5,7 @@ This library was heavily inspired by RedLib and SpigotUtils, but it aims to prov
 
  ### 1. An Event Listener + Handler annotation that does everything for you!
 
-```
+```java
 public static @Listener void onPlayerJoin(PlayerJoinEvent event) {  
     event.getPlayer().sendMessage("Hello!");  
 }
