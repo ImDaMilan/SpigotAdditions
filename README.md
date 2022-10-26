@@ -20,9 +20,9 @@ No need to register the listener or put it in a class that implements Listener, 
  usage = "/test",  
  description = "Testing command",  
  aliases = {"t", "testcommand"},  
- minArgs = 1,   
+ minArgs = 0,   
  playerOnly = false,  
- consoleOnly = false)  
+ consoleOnly = false
 )  
 public class TestCommand {  
   public static boolean execute(CommandSender sender, Command command, String label, String[] args) {  
@@ -30,7 +30,7 @@ public class TestCommand {
 	return true;
  }}
 ```
-Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out!
+Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out! Keep in mind that the method must be called "execute", must have these parameters, and must be a static boolean method.
 
 ###  3. A Custom Enchantment API!
 ```java
