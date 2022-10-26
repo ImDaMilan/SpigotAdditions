@@ -44,8 +44,9 @@ public class ItemStackBuilder extends ItemStack {
      * Sets the amount of the items in the ItemStackBuilder.
      * @param amount New amount of items in this stack
      */
-    public void amount(int amount) {
+    public ItemStackBuilder amount(int amount) {
         super.setAmount(amount);
+        return this;
     }
 
     /**
@@ -127,7 +128,7 @@ public class ItemStackBuilder extends ItemStack {
      * @param enchantment The enchantment to add.
      * @param level The level of the enchantment.
      */
-    public ItemStackBuilder addEnchant(Enchantment enchantment, int level) {
+    public ItemStackBuilder enchant(Enchantment enchantment, int level) {
         super.addUnsafeEnchantment(enchantment, level);
         return this;
     }
@@ -136,7 +137,7 @@ public class ItemStackBuilder extends ItemStack {
      * Adds an enchantment to the ItemStack.
      * @param enchantment The enchantment to add.
      */
-    public ItemStackBuilder addEnchant(Enchantment enchantment) {
+    public ItemStackBuilder enchant(Enchantment enchantment) {
         super.addUnsafeEnchantment(enchantment, 1);
         return this;
     }
