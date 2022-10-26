@@ -39,7 +39,7 @@ public class EnchantmentWrapper extends Enchantment {
         this.target = target;
         Collections.addAll(this.conflicts, conflicts);
         try {
-            if (!Arrays.stream(Enchantment.values()).toList().contains(this)) {
+            if (!Arrays.asList(Enchantment.values()).contains(this)) {
                 Field fieldAcceptingNew = Enchantment.class.getDeclaredField("acceptingNew");
                 fieldAcceptingNew.setAccessible(true);
                 fieldAcceptingNew.set(null, true);

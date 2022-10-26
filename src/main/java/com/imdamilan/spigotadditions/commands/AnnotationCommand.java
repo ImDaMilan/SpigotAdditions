@@ -12,7 +12,7 @@ public class AnnotationCommand extends BukkitCommand {
     private final Class<?> clazz;
 
     protected AnnotationCommand(Command annotation, Class<?> clazz) {
-        super(annotation.name(), annotation.description(), annotation.usage(), Arrays.stream(annotation.aliases()).toList());
+        super(annotation.name(), annotation.description(), annotation.usage(), Arrays.asList(annotation.aliases()));
         setPermission(annotation.permission());
         setPermissionMessage(annotation.permissionMessage());
         setLabel(annotation.name());
