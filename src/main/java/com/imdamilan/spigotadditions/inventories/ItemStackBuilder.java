@@ -45,7 +45,7 @@ public class ItemStackBuilder extends ItemStack {
      * @param amount New amount of items in this stack
      */
     public ItemStackBuilder amount(int amount) {
-        super.setAmount(amount);
+        setAmount(amount);
         return this;
     }
 
@@ -57,7 +57,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         meta.setDisplayName(name);
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -69,7 +69,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         meta.setLore(Arrays.asList(lore));
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -81,7 +81,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         Objects.requireNonNull(meta.getLore()).addAll(Arrays.asList(lore));
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -94,7 +94,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         Objects.requireNonNull(meta.getLore()).set(index, lore);
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -107,7 +107,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         meta.addAttributeModifier(attribute, modifier);
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -119,7 +119,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         meta.setCustomModelData(modelData);
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 
@@ -129,7 +129,7 @@ public class ItemStackBuilder extends ItemStack {
      * @param level The level of the enchantment.
      */
     public ItemStackBuilder enchant(Enchantment enchantment, int level) {
-        super.addUnsafeEnchantment(enchantment, level);
+        addUnsafeEnchantment(enchantment, level);
         return this;
     }
 
@@ -138,7 +138,7 @@ public class ItemStackBuilder extends ItemStack {
      * @param enchantment The enchantment to add.
      */
     public ItemStackBuilder enchant(Enchantment enchantment) {
-        super.addUnsafeEnchantment(enchantment, 1);
+        addUnsafeEnchantment(enchantment, 1);
         return this;
     }
 
@@ -147,7 +147,7 @@ public class ItemStackBuilder extends ItemStack {
      * @param enchantment The enchantment to remove.
      */
     public ItemStackBuilder removeEnchant(Enchantment enchantment) {
-        super.removeEnchantment(enchantment);
+        removeEnchantment(enchantment);
         return this;
     }
 
@@ -155,7 +155,7 @@ public class ItemStackBuilder extends ItemStack {
      * Clears all enchantments from the ItemStack.
      */
     public ItemStackBuilder clearEnchants() {
-        super.getEnchantments().forEach((enchantment, integer) -> super.removeEnchantment(enchantment));
+        getEnchantments().forEach((enchantment, integer) -> removeEnchantment(enchantment));
         return this;
     }
 
@@ -169,7 +169,7 @@ public class ItemStackBuilder extends ItemStack {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
         meta.getPersistentDataContainer().set(key, type, data);
-        super.setItemMeta(meta);
+        setItemMeta(meta);
         return this;
     }
 }
