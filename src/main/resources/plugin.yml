@@ -1,0 +1,6 @@
+name: SpigotAdditions
+version: '${project.version}'
+main: com.imdamilan.spigotadditions.SpigotAdditions
+api-version: 1.19
+authors: [ ImDaMilan ]
+description: A library for making Spigot plugin development easier!
