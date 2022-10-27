@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -40,12 +39,17 @@ public class InventoryGUI implements Listener {
         this(Bukkit.createInventory(null, size, title));
     }
 
+    public int getFirstEmptySlot() {
+        return inventory.firstEmpty();
+    }
+
     /**
      * Adds a custom amount of buttons to the inventory.
      * @param buttons The buttons to add.
      */
     public void addButtons(GUIButton... buttons) {
         for (GUIButton button : buttons) {
+            this.buttons.put(inventory.firstEmpty(), button);
             inventory.addItem(button.getItem());
         }
     }
@@ -242,30 +246,28 @@ public class InventoryGUI implements Listener {
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.getClickedInventory() == null) return;
-        if (event.getAction() == InventoryAction.COLLECT_TO_CURSOR && !event.getClickedInventory().equals(inventory)) {
+        if (!inventory.equals(event.getView().getTopInventory()) && !event.getClickedInventory().equals(inventory)) {
+            return;
+        }
+        if (buttons.containsKey(event.getSlot())) {
+            buttons.get(event.getSlot()).onClick(event);
             event.setCancelled(true);
             return;
         }
-        if (event.getView().getTopInventory().equals(inventory)) {
-            if (buttons.containsKey(event.getSlot())) {
-                buttons.get(event.getSlot()).onClick(event);
-                event.setCancelled(true);
-                return;
-            }
-            if (!openSlots.contains(event.getSlot())) {
-                event.setCancelled(true);
-            }
+        if (!openSlots.contains(event.getSlot())) {
+            event.setCancelled(true);
         }
     }
 
     @EventHandler
     public void onInventoryDrag(InventoryDragEvent event) {
-        if (event.getInventory().equals(inventory)) {
-            for (int slot : event.getRawSlots()) {
-                if (!openSlots.contains(slot)) {
-                    event.setCancelled(true);
-                    return;
-                }
+        if (!inventory.equals(event.getView().getTopInventory()) && !event.getInventory().equals(inventory)) {
+            return;
+        }
+        for (int slot : event.getRawSlots()) {
+            if (!openSlots.contains(slot)) {
+                event.setCancelled(true);
+                return;
             }
         }
     }
