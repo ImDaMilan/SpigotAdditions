@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
-import java.util.Objects;
+import java.util.Collections;
 
 public class ItemStackBuilder extends ItemStack {
 
@@ -80,7 +80,11 @@ public class ItemStackBuilder extends ItemStack {
     public ItemStackBuilder addLore(String... lore) {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
-        Objects.requireNonNull(meta.getLore()).addAll(Arrays.asList(lore));
+        if (meta.hasLore() && meta.getLore() != null) {
+            meta.getLore().addAll(Arrays.asList(lore));
+        } else {
+            meta.setLore(Arrays.asList(lore));
+        }
         setItemMeta(meta);
         return this;
     }
@@ -93,7 +97,11 @@ public class ItemStackBuilder extends ItemStack {
     public ItemStackBuilder lore(int index, String lore) {
         ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
         assert meta != null;
-        Objects.requireNonNull(meta.getLore()).set(index, lore);
+        if (meta.hasLore() && meta.getLore() != null && meta.getLore().size() > index) {
+            meta.getLore().set(index, lore);
+        } else {
+            meta.setLore(Collections.singletonList(lore));
+        }
         setItemMeta(meta);
         return this;
     }
