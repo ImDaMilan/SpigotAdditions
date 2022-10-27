@@ -142,7 +142,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:Tag'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:0.2'
 }
 ```
 
