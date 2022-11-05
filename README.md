@@ -20,17 +20,17 @@ No need to register the listener or put it in a class that implements Listener, 
  usage = "/test",  
  description = "Testing command",  
  aliases = {"t", "testcommand"},  
- minArgs = 0,   
+ minArgs = 1,   
  playerOnly = false,  
- consoleOnly = false
+ consoleOnly = false)  
 )  
 public class TestCommand {  
   public static boolean execute(CommandSender sender, Command command, String label, String[] args) {  
-	sender.sendMessage("Test command executed!");
-	return true;
+	  sender.sendMessage("Test command executed!");
+	  return true;
  }}
 ```
-Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out! Keep in mind that the method must be called "execute", must have these parameters, and must be a static boolean method.
+Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out!
 
 ###  3. A Custom Enchantment API!
 ```java
@@ -59,13 +59,29 @@ There is a lot more to the ItemStackBuilder class, like adding persistent data t
 ### 5. Easy GUI creation tools!
 ```java
 InventoryGUI iGui = new InventoryGUI("Test", 54);  
+
 iGui.fillEmptySlots(new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).name(""));  
+
 iGui.addButtons(GUIButton.create(new ItemStackBuilder(Material.BOOK).name(ChatColor.RED + "Test"), event -> {  
   event.getWhoClicked().sendMessage("Test");  
 }));
+
 Inventory gui = iGui.getInventory();
 ```
 This automatically makes all slots in the inventory unclickable except for the buttons and the ones that you say should be open in your code! It does all the GUI setting up for you, so you don't have to bother with that! There is **A LOT** more in the InventoryGUI class that you can use, you can discover all the amazing features by using the library!
+```java
+PaginatedGUI gui = new PaginatedGUI();
+
+gui.addPage(iGui);
+gui.nextPage(player);
+gui.previousPage(player);
+
+gui.getCurrentPage();
+gui.getPages().forEach(page -> {
+	page.addButtons(new SetPageButton(item, gui, SetPageButtonType.NEXT), new SetPageButton(item, gui, SetPageButtonType.PREVIOUS));
+}
+```
+Introduced in version 0.2, PaginatedGUIs can also be created, and they are as simple to create and use as one can imagine, 0.2 also introduced SetPageButtons, that are GUIButtons that willl automatically do all the PaginatedGUI page setting for you!
 
 ### 6. Custom Item API and Player Head API!
 ```java
@@ -100,32 +116,35 @@ updater.download(); //automatically downloads the newest version!
 
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
-```
+```yml
 depend: [ SpigotAdditions ]
 ```
 ### Maven
-```
+```xml
 <repository>
 	<id>jitpack.io</id>
 	<url>https://jitpack.io</url>
 </repository>
 ```
-```
+```xml
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>0.1.2</version>
+	<version>0.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
 ### Gradle
-```
+```groovy
 repositories {
 	maven { url 'https://jitpack.io' }
 }
 ```
-```
+```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:0.1.2'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:0.2'
 }
 ```
+
+## Additional Credits
+Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
