@@ -1,5 +1,6 @@
 package com.imdamilan.spigotadditions.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -8,29 +9,21 @@ import org.bukkit.plugin.Plugin;
 
 public class CustomItem {
 
-    private ItemStack item;
-
     /**
-     * Creates a new CustomItem with the given material and name.
+     * Creates a new CustomItem with the given ItemStack, key and plugin.
      * @param item The ItemStack that will be used as a base for the CustomItem.
      * @param sKey The key of the CustomItem, must be unique, lowercase, and contain no spaces, should be in the format of "plugin_name:custom_item_name".
      * @param plugin The instance of the plugin.
      */
-    public CustomItem(ItemStack item, String sKey, Plugin plugin) {
+    public static ItemStack from(ItemStack item, String sKey, Plugin plugin) {
         NamespacedKey key = new NamespacedKey(plugin, "custom_items");
-        ItemMeta meta = item.getItemMeta();
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         if (meta != null) {
             meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, sKey);
             item.setItemMeta(meta);
         } else {
             throw new NullPointerException("The ItemMeta of the item passed to CustomItem constructor must not be null.");
         }
-    }
-
-    /**
-     * Builds the ItemStack.
-     */
-    public ItemStack get() {
         return item;
     }
 

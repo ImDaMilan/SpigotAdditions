@@ -43,7 +43,7 @@ public class AnnotationCommand extends BukkitCommand {
         } catch (ClassCastException e) {
             throw new RuntimeException("The execute method in " + clazz.getName() + " must return a boolean.");
         } catch (NoSuchMethodException e) {
-            throw new RuntimeException("Command class " + clazz.getName() + " does not have a boolean method named execute(CommandSender, String, String[]), which is required for commands to work.");
+            throw new RuntimeException("Command class " + clazz.getName() + " does not have a static boolean method named execute(CommandSender, String, String[]), which is required for commands to work.");
         } catch (Exception e) {
             e.printStackTrace();
         }
