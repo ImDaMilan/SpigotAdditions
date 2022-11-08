@@ -16,7 +16,18 @@ public class CustomItem {
      * @param plugin The instance of the plugin.
      */
     public static ItemStack from(ItemStack item, String sKey, Plugin plugin) {
-        NamespacedKey key = new NamespacedKey(plugin, "custom_items");
+        return from(item, sKey, "custom_items", plugin);
+    }
+
+    /**
+     * Creates a new CustomItem with the given ItemStack, keys and plugin.
+     * @param item The ItemStack that will be used as a base for the CustomItem.
+     * @param sKey The key of the CustomItem, must be unique, lowercase, and contain no spaces, should be in the format of "plugin_name:custom_item_name".
+     * @param nKey The namespace key that persistent data will be stored under, must be unique, lowercase, and contain no spaces.
+     * @param plugin The instance of the plugin.
+     */
+    public static ItemStack from(ItemStack item, String sKey, String nKey, Plugin plugin) {
+        NamespacedKey key = new NamespacedKey(plugin, nKey);
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         if (meta != null) {
             meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, sKey);

@@ -13,8 +13,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -186,6 +188,9 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                         effectJSON.addProperty("amplifier", effect.getAmplifier());
                         effectJSON.addProperty("duration", effect.getDuration());
                         effectJSON.addProperty("type", effect.getType().getName());
+                        effectJSON.addProperty("ambient", effect.isAmbient());
+                        effectJSON.addProperty("particles", effect.hasParticles());
+                        effectJSON.addProperty("icon", effect.hasIcon());
                         effects.add(effectJSON);
                     });
                     potionMetaJSON.add("effects", effects);
@@ -194,6 +199,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                 potionMetaJSON.addProperty("base", potionMeta.getBasePotionData().getType().name());
                 potionMetaJSON.addProperty("extended", potionMeta.getBasePotionData().isExtended());
                 potionMetaJSON.addProperty("upgraded", potionMeta.getBasePotionData().isUpgraded());
+                potionMetaJSON.addProperty("type", potionMeta.getBasePotionData().getType().name());
                 itemMetaJSON.add("potion", potionMetaJSON);
             }
             itemJSON.add("meta", itemMetaJSON);
@@ -330,8 +336,8 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
             }
             if (itemMetaJSON.has("potion")) {
                 JsonObject potionMetaJSON = itemMetaJSON.get("potion").getAsJsonObject();
-                if (potionMetaJSON.has("color")) {
-                    ((PotionMeta) meta).setColor(Color.fromRGB(Integer.parseInt(potionMetaJSON.get("color").getAsString(), 16)));
+                if (potionMetaJSON.has("extended") && potionMetaJSON.has("upgraded") && potionMetaJSON.has("type")) {
+                    ((PotionMeta) meta).setBasePotionData(new PotionData(PotionType.valueOf(potionMetaJSON.get("type").getAsString()), potionMetaJSON.get("extended").getAsBoolean(), potionMetaJSON.get("upgraded").getAsBoolean()));
                 }
                 if (potionMetaJSON.has("effects")) {
                     JsonArray customEffects = potionMetaJSON.get("effects").getAsJsonArray();
