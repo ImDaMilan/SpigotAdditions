@@ -59,4 +59,13 @@ public class PaginatedGUI {
     public void addPage(InventoryGUI page) {
         pages.add(page);
     }
+
+    /**
+     * Opens the PaginatedGUI at the first page for the given player.
+     * @param player The player to open the GUI for.
+     */
+    public void open(HumanEntity player) {
+        currentPage = 0;
+        player.openInventory(pages.get(0).getInventory());
+    }
 }

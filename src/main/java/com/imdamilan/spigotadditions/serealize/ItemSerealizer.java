@@ -13,14 +13,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.potion.PotionType;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class ItemSerealizer implements JSONSerealizer<ItemStack> {
 
@@ -97,7 +96,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                 SkullMeta skullMeta = (SkullMeta) meta;
                 JsonObject skullMetaJSON = new JsonObject();
                 if (skullMeta.hasOwner() && skullMeta.getOwningPlayer() != null) {
-                    skullMetaJSON.addProperty("owner", skullMeta.getOwningPlayer().getName());
+                    skullMetaJSON.addProperty("owner", skullMeta.getOwningPlayer().getUniqueId().toString());
                 }
                 itemMetaJSON.add("skull", skullMetaJSON);
             }
@@ -174,6 +173,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                 if (mapMeta.hasMapView() && mapMeta.getMapView() != null) {
                     mapMetaJSON.addProperty("mapview", mapMeta.getMapView().getId());
                 }
+                mapMetaJSON.addProperty("scaling", mapMeta.isScaling());
                 itemMetaJSON.add("map", mapMetaJSON);
             }
             if (meta instanceof PotionMeta) {
@@ -238,7 +238,12 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
             }
             if (itemMetaJSON.has("persistentdata")) {
                 JsonArray persistentData = itemMetaJSON.get("persistentdata").getAsJsonArray();
-                persistentData.forEach(data -> meta.getPersistentDataContainer().set(new NamespacedKey(plugin, "custom_items"), PersistentDataType.STRING, data.getAsString()));
+                persistentData.forEach(data -> {
+                    JsonObject dataJSON = data.getAsJsonObject();
+                    NamespacedKey key = new NamespacedKey(plugin, dataJSON.get("key").getAsString());
+                    String value = dataJSON.get("value").getAsString();
+                    meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, value);
+                });
             }
             if (itemMetaJSON.has("durability")) {
                 ((Damageable) meta).setDamage(itemMetaJSON.get("durability").getAsInt());
@@ -246,7 +251,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
             if (itemMetaJSON.has("skull")) {
                 JsonObject skullMetaJSON = itemMetaJSON.get("skull").getAsJsonObject();
                 if (skullMetaJSON.has("owner")) {
-                    ((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(skullMetaJSON.get("owner").getAsString()));
+                    ((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(UUID.fromString(skullMetaJSON.get("owner").getAsString())));
                 }
             }
             if (itemMetaJSON.has("banner")) {
@@ -255,11 +260,8 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                     JsonArray patterns = bannerMetaJSON.get("patterns").getAsJsonArray();
                     patterns.forEach(pattern -> {
                         JsonObject patternJSON = pattern.getAsJsonObject();
-                        ((BannerMeta) meta).addPattern(new Pattern(DyeColor.valueOf(patternJSON.get("color").getAsString()), PatternType.valueOf(patternJSON.get("type").getAsString())));
+                        ((BannerMeta) meta).addPattern(new Pattern(DyeColor.valueOf(patternJSON.get("color").getAsString()), PatternType.valueOf(patternJSON.get("pattern").getAsString())));
                     });
-                }
-                if (bannerMetaJSON.has("basecolor")) {
-                    ((BannerMeta) meta).setBaseColor(DyeColor.valueOf(bannerMetaJSON.get("basecolor").getAsString()));
                 }
             }
             if (itemMetaJSON.has("book")) {
@@ -275,9 +277,6 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                     List<String> pagesList = new ArrayList<>();
                     pages.forEach(page -> pagesList.add(page.getAsString()));
                     ((BookMeta) meta).setPages(pagesList);
-                }
-                if (bookMetaJSON.has("generation")) {
-                    ((BookMeta) meta).setGeneration(BookMeta.Generation.valueOf(bookMetaJSON.get("generation").getAsString()));
                 }
             }
             if (itemMetaJSON.has("firework")) {
@@ -303,8 +302,8 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                             JsonArray colors = effectJSON.get("colors").getAsJsonArray();
                             colors.forEach(color -> builder.withColor(Color.fromRGB(Integer.parseInt(color.getAsString(), 16))));
                         }
-                        if (effectJSON.has("fade")) {
-                            JsonArray fade = effectJSON.get("fade").getAsJsonArray();
+                        if (effectJSON.has("fadecolors")) {
+                            JsonArray fade = effectJSON.get("fadecolors").getAsJsonArray();
                             fade.forEach(color -> builder.withFade(Color.fromRGB(Integer.parseInt(color.getAsString(), 16))));
                         }
                         ((FireworkMeta) meta).addEffect(builder.build());
@@ -319,8 +318,14 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
             }
             if (itemMetaJSON.has("map")) {
                 JsonObject mapMetaJSON = itemMetaJSON.get("map").getAsJsonObject();
+                if (mapMetaJSON.has("locationname")) {
+                    ((MapMeta) meta).setLocationName(mapMetaJSON.get("locationname").getAsString());
+                }
                 if (mapMetaJSON.has("scaling")) {
                     ((MapMeta) meta).setScaling(mapMetaJSON.get("scaling").getAsBoolean());
+                }
+                if (mapMetaJSON.has("mapview")) {
+                    ((MapMeta) meta).setMapView(Bukkit.getMap(mapMetaJSON.get("mapview").getAsInt()));
                 }
             }
             if (itemMetaJSON.has("potion")) {
@@ -341,9 +346,8 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
                         if (type != null) ((PotionMeta) meta).addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles, icon), true);
                     });
                 }
-                if (potionMetaJSON.has("main-effect")) {
-                    PotionData data = new PotionData(PotionType.valueOf(potionMetaJSON.get("main-effect").getAsString()));
-                    ((PotionMeta) meta).setBasePotionData(data);
+                if (potionMetaJSON.has("color")) {
+                    ((PotionMeta) meta).setColor(Color.fromRGB(Integer.parseInt(potionMetaJSON.get("color").getAsString(), 16)));
                 }
             }
             item.setItemMeta(meta);
