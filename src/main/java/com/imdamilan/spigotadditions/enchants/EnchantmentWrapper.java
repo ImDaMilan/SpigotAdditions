@@ -20,17 +20,7 @@ public class EnchantmentWrapper extends Enchantment {
     private final boolean cursed;
     private final EnchantmentTarget target;
 
-    /**
-     * Creates a new custom enchantment registered as a Minecraft enchantment.
-     * @param key The key of the enchantment, all lowercase, no spaces
-     * @param name The name of the enchantment
-     * @param maxLevel The maximum level of the enchantment
-     * @param treasure Whether the enchantment is a treasure enchantment
-     * @param cursed Whether the enchantment is a cursed enchantment
-     * @param target The enchantment target
-     * @param conflicts The enchantments that conflict with this enchantment
-     */
-    public EnchantmentWrapper(String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
+    private EnchantmentWrapper(String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
         super(NamespacedKey.minecraft(key));
         this.name = name;
         this.maxLevel = maxLevel;
@@ -52,8 +42,7 @@ public class EnchantmentWrapper extends Enchantment {
     }
 
     /**
-     * Creates a new custom enchantment registering it as a plugin enchantment.
-     * @param plugin The plugin that is registering the enchantment
+     * Creates a new custom enchantment registered as a Minecraft enchantment.
      * @param key The key of the enchantment, all lowercase, no spaces
      * @param name The name of the enchantment
      * @param maxLevel The maximum level of the enchantment
@@ -61,8 +50,13 @@ public class EnchantmentWrapper extends Enchantment {
      * @param cursed Whether the enchantment is a cursed enchantment
      * @param target The enchantment target
      * @param conflicts The enchantments that conflict with this enchantment
+     * @return The newly created enchantment
      */
-    public EnchantmentWrapper(Plugin plugin, String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
+    public static Enchantment createEnchantment(String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
+        return new EnchantmentWrapper(key, name, maxLevel, treasure, cursed, target, conflicts);
+    }
+
+    private EnchantmentWrapper(Plugin plugin, String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
         super(new NamespacedKey(plugin, key));
         this.name = name;
         this.maxLevel = maxLevel;
@@ -79,6 +73,22 @@ public class EnchantmentWrapper extends Enchantment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Creates a new custom enchantment registering it as a plugin enchantment.
+     * @param plugin The plugin that is registering the enchantment
+     * @param key The key of the enchantment, all lowercase, no spaces
+     * @param name The name of the enchantment
+     * @param maxLevel The maximum level of the enchantment
+     * @param treasure Whether the enchantment is a treasure enchantment
+     * @param cursed Whether the enchantment is a cursed enchantment
+     * @param target The enchantment target
+     * @param conflicts The enchantments that conflict with this enchantment
+     * @return The newly created enchantment
+     */
+    public static Enchantment createEnchantment(Plugin plugin, String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts) {
+        return new EnchantmentWrapper(plugin, key, name, maxLevel, treasure, cursed, target, conflicts);
     }
 
     @Override

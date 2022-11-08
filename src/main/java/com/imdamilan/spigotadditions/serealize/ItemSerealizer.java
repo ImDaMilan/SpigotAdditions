@@ -25,6 +25,11 @@ import java.util.UUID;
 
 public class ItemSerealizer implements JSONSerealizer<ItemStack> {
 
+    /**
+     * Serializes the given ItemStack to a JSON formatted String.
+     * @param item The item to be serialized.
+     * @return The JSON String with all the data of the ItemStack.
+     */
     @Override
     public String toJson(ItemStack item) {
         Gson gson = new Gson();
@@ -207,6 +212,12 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
         return gson.toJson(itemJSON);
     }
 
+    /**
+     * Deserializes an item from a JSON string.
+     * @param string The String to be deserialized.
+     * @param plugin The instance of the plugin that is deserializing the item.
+     * @return The deserialized item.
+     */
     @Override
     public ItemStack fromJson(String string, Plugin plugin) {
         Gson gson = new Gson();

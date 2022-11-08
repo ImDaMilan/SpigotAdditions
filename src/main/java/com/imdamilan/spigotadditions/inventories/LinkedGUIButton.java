@@ -12,7 +12,7 @@ public class LinkedGUIButton extends GUIButton {
      * @param item The item to be displayed in the inventory.
      * @param to The InventoryGUI to be opened.
      */
-    protected LinkedGUIButton(ItemStack item, InventoryGUI to) {
+    public LinkedGUIButton(ItemStack item, InventoryGUI to) {
         super(item);
         this.to = to;
     }
