@@ -114,6 +114,17 @@ String latestVersion = updater.getLatest();
 updater.download(); //automatically downloads the newest version!
 ```
 
+### 9. Serealizers!
+To create your own Serealizers, you can implement the `JSONSerealizer<>` and/or `YAMLSerealizer<>` interfaces in your own class!
+SpigotAdditions has a built-in ItemSerealizer class since 0.3, that you can use to serealize ItemStacks to both JSON and YAML!
+```java
+ItemSerealizer is = new ItemSerealizer();
+ItemStack itemFromJson = is.fromJson(jsonString, PLUGININSTANCE);
+String jsonFromItem = is.toJson(item);
+ItemStack itemFromYaml = is.fromYaml(yamlString, PLUGINSTANCE);
+String yamlFromItem = is.toYaml(item);
+```
+
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
 ```yml
