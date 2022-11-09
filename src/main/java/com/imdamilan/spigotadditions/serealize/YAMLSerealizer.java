@@ -1,5 +1,7 @@
 package com.imdamilan.spigotadditions.serealize;
 
+import org.bukkit.plugin.Plugin;
+
 public interface YAMLSerealizer<T> {
 
     /**
@@ -14,5 +16,5 @@ public interface YAMLSerealizer<T> {
      * @param string The String to be deserialized.
      * @return The deserialized object.
      */
-    T fromYaml(String string);
+    T fromYaml(String string, Plugin plugin);
 }

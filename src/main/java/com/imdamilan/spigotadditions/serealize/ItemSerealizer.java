@@ -1,5 +1,8 @@
 package com.imdamilan.spigotadditions.serealize;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class ItemSerealizer implements JSONSerealizer<ItemStack> {
+public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer<ItemStack> {
 
     /**
      * Serializes the given ItemStack to a JSON formatted String.
@@ -370,5 +373,37 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack> {
             item.setItemMeta(meta);
         }
         return item;
+    }
+
+    /**
+     * Converts an ItemStack to a YAML string.
+     * @param object The item to be serialized.
+     * @return The YAML string, or null if an exception appeared.
+     */
+    @Override
+    public String toYaml(ItemStack object) {
+        try {
+            return new YAMLMapper().writeValueAsString(new ObjectMapper().readTree(this.toJson(object)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Converts a YAML string to an ItemStack.
+     * @param string The String to be deserialized.
+     * @param plugin The instance of the plugin that is deserializing the item.
+     * @return The ItemStack deserealized from the YAML string.
+     */
+    @Override
+    public ItemStack fromYaml(String string, Plugin plugin) {
+        try {
+            ObjectMapper reader = new ObjectMapper(new YAMLFactory());
+            Object obj = reader.readValue(string, Object.class);
+            ObjectMapper writer = new ObjectMapper();
+            return this.fromJson(writer.writeValueAsString(obj), plugin);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
