@@ -34,15 +34,15 @@ Again, no need to put it in the plugin.yml or to do anything in the main class o
 
 ###  3. A Custom Enchantment API!
 ```java
-public EnchantmentWrapper(String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts)
+private EnchantmentWrapper(String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts)
 ```
 Above is the constructor that is used to create an EnchantmentWrapper instance.
 ```java
-public EnchantmentWrapper(Plugin plugin, String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts)
+private EnchantmentWrapper(Plugin plugin, String key, String name, int maxLevel, boolean treasure, boolean cursed, EnchantmentTarget target, Enchantment... conflicts)
 ```
 The above can be used as well to register the enchantment to the plugin instead of a Minecraft enchantment.
 ```java
-new EnchantmentWrapper("telekinesis", "Telekinesis", 1, false, false, EnchantmentTarget.TOOL);
+Enchantment TELEKINESIS = EnchantmentWrapper.createEnchantment("telekinesis", "Telekinesis", 1, false, false, EnchantmentTarget.TOOL);
 ```
 And this above is it! Yup, you can create a custom enchantment with a single line of code! This, combined with the Listener API mentioned above can be used to add functionality to your custom enchantments!
 ### 4. ItemStackBuilder
@@ -85,7 +85,7 @@ Introduced in version 0.2, PaginatedGUIs can also be created, and they are as si
 
 ### 6. Custom Item API and Player Head API!
 ```java
-new CustomItem(item, "plugin_name:test_custom_item", PLUGININSTANCE);
+ItemStack customItem = CustomItem.from(item, "plugin_name:test_custom_item", PLUGININSTANCE);
 ```
 This will add data to the item (ItemStack) that is passed as the first parameter, effectively turning it into a custom item! To further increase it's capabilities, you can use the ItemStackBuilder and the Listener API. You can always check if an item is a custom item using:
 ```java
@@ -114,6 +114,17 @@ String latestVersion = updater.getLatest();
 updater.download(); //automatically downloads the newest version!
 ```
 
+### 9. Serealizers!
+To create your own Serealizers, you can implement the `JSONSerealizer<>` and/or `YAMLSerealizer<>` interfaces in your own class!
+SpigotAdditions has a built-in ItemSerealizer class since 0.3, that you can use to serealize ItemStacks to both JSON and YAML!
+```java
+ItemSerealizer is = new ItemSerealizer();
+ItemStack itemFromJson = is.fromJson(jsonString, PLUGININSTANCE);
+String jsonFromItem = is.toJson(item);
+ItemStack itemFromYaml = is.fromYaml(yamlString, PLUGINSTANCE);
+String yamlFromItem = is.toYaml(item);
+```
+
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
 ```yml
@@ -130,7 +141,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>7d26366026</version>
+	<version>0.3</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -142,9 +153,11 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:7d26366026'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:0.3'
 }
 ```
+
+[![](https://jitpack.io/v/ImDaMilan/SpigotAdditions.svg)](https://jitpack.io/#ImDaMilan/SpigotAdditions)
 
 ## Additional Credits
 Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
