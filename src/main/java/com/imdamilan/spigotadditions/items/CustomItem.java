@@ -41,11 +41,23 @@ public class CustomItem {
     /**
      * Checks if the given ItemStack is a CustomItem.
      * @param item The ItemStack to check.
-     * @param plugin The instance of the plugin.
+     * @param plugin The instance of the plugin that registered the item.
      * @return True if the ItemStack is a CustomItem, false otherwise.
      */
     public static boolean isCustomItem(ItemStack item, Plugin plugin) {
         return item.hasItemMeta() && item.getItemMeta() != null
         && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, "custom_items"), PersistentDataType.STRING);
+    }
+
+    /**
+     * Checks if the given ItemStack is a CustomItem.
+     * @param item The ItemStack to check.
+     * @param nKey The namespace key that persistent data was stored under.
+     * @param plugin The instance of the plugin that registered the item.
+     * @return True if the ItemStack is a CustomItem, false otherwise.
+     */
+    public static boolean isCustomItem(ItemStack item, String nKey, Plugin plugin) {
+        return item.hasItemMeta() && item.getItemMeta() != null
+                && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, nKey), PersistentDataType.STRING);
     }
 }

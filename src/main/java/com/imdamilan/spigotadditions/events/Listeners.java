@@ -37,7 +37,6 @@ public class Listeners implements org.bukkit.event.Listener {
                             try {
                                 HandlerList handlers = (HandlerList) method.getParameters()[0].getType().getDeclaredMethod("getHandlerList").invoke(null);
                                 handlers.register(rl);
-                                SpigotAdditions.getInstance().getLogger().info("Registered listener for " + method.getParameters()[0].getType().getSimpleName() + " event " + " for plugin " + plugin.getName() + ".");
                             } catch (Exception e) {
                                 SpigotAdditions.getInstance().getLogger().warning("The event " + method.getParameters()[0].getType().getSimpleName() + " does not have a getHandlerList() method!");
                             }

@@ -6,7 +6,7 @@
 
     <groupId>com.imdamilan</groupId>
     <artifactId>SpigotAdditions</artifactId>
-    <version>0.3</version>
+    <version>0.3.1</version>
     <packaging>jar</packaging>
 
     <name>SpigotAdditions</name>
@@ -125,7 +125,7 @@
     <distributionManagement>
         <repository>
             <id>SpigotAdditions</id>
-            <url>http://localhost:8080/snapshots</url>
+            <url>http://localhost:8080/releases</url>
         </repository>
     </distributionManagement>
 </project>

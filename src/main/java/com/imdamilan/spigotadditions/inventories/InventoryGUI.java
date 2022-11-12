@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -254,7 +255,10 @@ public class InventoryGUI implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (!openSlots.contains(event.getSlot())) {
+        if (event.getClickedInventory().getType() == InventoryType.PLAYER) {
+            return;
+        }
+        if (!openSlots.contains(event.getSlot()) && event.getSlot() < inventory.getSize()) {
             event.setCancelled(true);
         }
     }
@@ -265,7 +269,7 @@ public class InventoryGUI implements Listener {
             return;
         }
         for (int slot : event.getRawSlots()) {
-            if (!openSlots.contains(slot)) {
+            if (!openSlots.contains(slot) && slot < inventory.getSize()) {
                 event.setCancelled(true);
                 return;
             }
