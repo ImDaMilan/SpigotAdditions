@@ -141,7 +141,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>0.3</version>
+	<version>1458616032</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -153,7 +153,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:0.3'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1458616032'
 }
 ```
 
