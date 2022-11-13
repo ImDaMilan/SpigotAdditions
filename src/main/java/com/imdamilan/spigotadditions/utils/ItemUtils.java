@@ -22,22 +22,22 @@ import java.util.stream.Collectors;
 
 public class ItemUtils {
 
-    public static void setTag(ItemStack item, String key, String value, Plugin plugin) {
+    public static <T, Z> void setTag(ItemStack item, String key, Z value, Plugin plugin, PersistentDataType<T, Z> type) {
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         assert meta != null;
-        meta.getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
+        meta.getPersistentDataContainer().set(new NamespacedKey(plugin, key), type, value);
         item.setItemMeta(meta);
     }
 
-    public static String getTag(ItemStack item, String key, Plugin plugin) {
+    public static <T, Z> Z getTag(ItemStack item, String key, Plugin plugin, PersistentDataType<T, Z> type) {
         return item.hasItemMeta() && item.getItemMeta() != null
-                && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, key), PersistentDataType.STRING)
-                ? item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, key), PersistentDataType.STRING) : null;
+                && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, key), type)
+                ? item.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, key), type) : null;
     }
 
-    public static boolean hasTag(ItemStack item, String key, Plugin plugin) {
+    public static <T, Z> boolean hasTag(ItemStack item, String key, Plugin plugin, PersistentDataType<T, Z> type) {
         return item.hasItemMeta() && item.getItemMeta() != null
-                && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, key), PersistentDataType.STRING);
+                && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, key), type);
     }
 
     public static void removeTag(ItemStack item, String key, Plugin plugin) {

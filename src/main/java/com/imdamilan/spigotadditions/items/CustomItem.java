@@ -10,7 +10,8 @@ import org.bukkit.plugin.Plugin;
 public class CustomItem {
 
     /**
-     * Creates a new CustomItem with the given ItemStack, key and plugin.
+     * Creates a new CustomItem with the given ItemStack, key and plugin, since no nKey is provided here, a hard-coded one will be used.
+     * To use a custom key, use the {@link CustomItem#from(ItemStack, String, String, Plugin)} method.
      * @param item The ItemStack that will be used as a base for the CustomItem.
      * @param sKey The key of the CustomItem, must be unique, lowercase, and contain no spaces, should be in the format of "plugin_name:custom_item_name".
      * @param plugin The instance of the plugin.

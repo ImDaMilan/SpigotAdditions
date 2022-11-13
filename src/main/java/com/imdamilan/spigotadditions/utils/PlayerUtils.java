@@ -4,11 +4,14 @@ import com.imdamilan.spigotadditions.SpigotAdditions;
 import com.imdamilan.spigotadditions.events.Listener;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PlayerUtils {
 
@@ -30,6 +33,55 @@ public class PlayerUtils {
             onlinePlayer.showPlayer(SpigotAdditions.getInstance(), player);
         }
         vanishedPlayers.remove(player);
+    }
+
+    public static ItemStack getItemInMainHand(Player player) {
+        return player.getInventory().getItemInMainHand();
+    }
+
+    public static ItemStack getItemInOffHand(Player player) {
+        return player.getInventory().getItemInOffHand();
+    }
+
+    public static void banPlayer(Player player, String reason) {
+        player.kickPlayer(reason);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, null, null);
+    }
+
+    public static void banPlayer(Player player, String reason, String source) {
+        player.kickPlayer(reason);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, null, source);
+    }
+
+    public static void banPlayer(Player player, String reason, String source, Date expiration) {
+        player.kickPlayer(reason);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, expiration, source);
+    }
+
+    public static void banPlayer(Player player, String reason, Date expiration) {
+        player.kickPlayer(reason);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(player.getName(), reason, expiration, null);
+    }
+
+    public static void banPlayerIP(Player player, String reason) {
+        player.kickPlayer(reason);
+        if (player.getAddress() != null) {
+            Bukkit.getBanList(BanList.Type.IP).addBan(player.getAddress().getAddress().getHostAddress(), reason, null, null);
+        }
+    }
+
+    public static void banPlayerIP(Player player, String reason, String source) {
+        player.kickPlayer(reason);
+        if (player.getAddress() != null) {
+            Bukkit.getBanList(BanList.Type.IP).addBan(player.getAddress().getAddress().getHostAddress(), reason, null, source);
+        }
+    }
+
+    public static void banPlayerIP(Player player, String reason, String source, Date expiration) {
+        player.kickPlayer(reason);
+        if (player.getAddress() != null) {
+            Bukkit.getBanList(BanList.Type.IP).addBan(player.getAddress().getAddress().getHostAddress(), reason, expiration, source);
+        }
     }
 
     public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
