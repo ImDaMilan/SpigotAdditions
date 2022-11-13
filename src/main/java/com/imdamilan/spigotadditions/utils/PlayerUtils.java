@@ -84,6 +84,27 @@ public class PlayerUtils {
         }
     }
 
+    public static  void heal(Player player) {
+        player.setHealth(20);
+        player.setFoodLevel(20);
+    }
+
+    public static void feed(Player player) {
+        player.setFoodLevel(20);
+    }
+
+    public static void clearInventory(Player player) {
+        player.getInventory().clear();
+    }
+
+    public static void playSound(Player player, String sound) {
+        player.playSound(player.getLocation(), sound, 1, 1);
+    }
+
+    public static void playSound(Player player, String sound, float volume, float pitch) {
+        player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
     public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (vanishedPlayers.contains(player)) {
