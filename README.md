@@ -1,4 +1,3 @@
-
 # SpigotAdditions
 An additional Spigot library aimed to be the dependency that saves developers time from pointless tasks and brings a bunch of useful utilities for Bukkit/Spigot/Paper developers to use!
 --
@@ -183,9 +182,11 @@ ItemUtils.isCrop(item);
 And many, many more! There are methods for modifying any type of ItemMeta - Books, Fireworks, Potions, Attributes, Enchants, ItemFlags, and so on! This is by far the longest Util class (and the above showcase is not even half of them!).
 ```java
 BukkitUtils.runAsync(() -> System.out.println("This is ran async!"));
-BukkitUtils.getAsync(object, () -> object.setName("test")); //this is used for returning values async, not usually possible in async functions, could be great for returning SQL data for example!
+BukkitUtils.getAsync(object, () -> object.setName("test")); //this is used for returning values async, not usually possible in async functions, could be great for returning SQL data for example, the value is returned through the object variable as a CompletableFuture
 BukkitUtils.isVersionHigherThan("Selected MC version");
 BukkitUtils.runTimerAsync(() -> System.out.println("This is ran async!"), 0L, 10L);
+double serverTPS = BukkitUtils.getTPS();
+String withColors = BukkitUtils.getColorCoded("$cWith a custom colorcode prefix!", '$');
 ```
 More of these are shown above as part of the Version API!
 Plans for the future are to add more util classes, like EntityUtils, WorldUtils, etc.
@@ -206,7 +207,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1458616032</version>
+	<version>334e9e26c3</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -218,7 +219,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1458616032'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:334e9e26c3'
 }
 ```
 
