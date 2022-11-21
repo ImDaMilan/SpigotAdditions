@@ -2,6 +2,7 @@ package com.imdamilan.spigotadditions.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -301,5 +302,85 @@ public class ItemUtils {
             ((BookMeta) meta).setGeneration(generation);
         }
         item.setItemMeta(meta);
+    }
+
+    public static boolean isItem(ItemStack item) {
+        return item.getType().isItem();
+    }
+
+    public static boolean isValidItem(ItemStack item) {
+        return item != null && item.getType() != Material.AIR;
+    }
+
+    public static boolean isArmor(ItemStack item) {
+        return item.getType().name().endsWith("_HELMET") || item.getType().name().endsWith("_CHESTPLATE") || item.getType().name().endsWith("_LEGGINGS") || item.getType().name().endsWith("_BOOTS");
+    }
+
+    public static boolean isHelmet(ItemStack item) {
+        return item.getType().name().endsWith("_HELMET");
+    }
+
+    public static boolean isChestplate(ItemStack item) {
+        return item.getType().name().endsWith("_CHESTPLATE");
+    }
+
+    public static boolean isLeggings(ItemStack item) {
+        return item.getType().name().endsWith("_LEGGINGS");
+    }
+
+    public static boolean isBoots(ItemStack item) {
+        return item.getType().name().endsWith("_BOOTS");
+    }
+
+    public static boolean isSword(ItemStack item) {
+        return item.getType().name().endsWith("_SWORD");
+    }
+
+    public static boolean isAxe(ItemStack item) {
+        return item.getType().name().endsWith("_AXE");
+    }
+
+    public static boolean isPickaxe(ItemStack item) {
+        return item.getType().name().endsWith("_PICKAXE");
+    }
+
+    public static boolean isShovel(ItemStack item) {
+        return item.getType().name().endsWith("_SHOVEL");
+    }
+
+    public static boolean isHoe(ItemStack item) {
+        return item.getType().name().endsWith("_HOE");
+    }
+
+    public static boolean isTool(ItemStack item) {
+        return isSword(item) || isAxe(item) || isPickaxe(item) || isShovel(item) || isHoe(item);
+    }
+
+    public static boolean isBow(ItemStack item) {
+        return item.getType() == Material.BOW;
+    }
+
+    public static boolean isInBucket(ItemStack item) {
+        return item.getType().name().endsWith("_BUCKET");
+    }
+
+    public static boolean isFood(ItemStack item) {
+        return item.getType().isEdible();
+    }
+
+    public static boolean isDrink(ItemStack item) {
+        return item.getType().isEdible() && item.getType().getMaxStackSize() == 1;
+    }
+
+    public static boolean isBlock(ItemStack item) {
+        return item.getType().isBlock();
+    }
+
+    public static boolean isSolidBlock(ItemStack item) {
+        return item.getType().isBlock() && item.getType().isSolid();
+    }
+
+    public static boolean isCrop(ItemStack item) {
+        return item.getType().equals(Material.WHEAT) || item.getType().equals(Material.CARROT) || item.getType().equals(Material.POTATO) || item.getType().equals(Material.BEETROOT) || item.getType().equals(Material.NETHER_WART) || item.getType().equals(Material.COCOA) || item.getType().equals(Material.SUGAR_CANE) || item.getType().equals(Material.CACTUS) || item.getType().equals(Material.MELON_STEM) || item.getType().equals(Material.PUMPKIN_STEM);
     }
 }

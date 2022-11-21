@@ -6,12 +6,16 @@ import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
 
 public class PlayerUtils {
 
@@ -103,6 +107,64 @@ public class PlayerUtils {
 
     public static void playSound(Player player, String sound, float volume, float pitch) {
         player.playSound(player.getLocation(), sound, volume, pitch);
+    }
+
+    public static void playSoundGlobal(String sound, float volume, float pitch) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.playSound(onlinePlayer.getLocation(), sound, volume, pitch);
+        }
+    }
+
+    public static void playSoundGlobal(String sound) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            onlinePlayer.playSound(onlinePlayer.getLocation(), sound, 1, 1);
+        }
+    }
+
+    public static void setPlayerListName(Player player, String name) {
+        player.setPlayerListName(name);
+    }
+
+    public static void setPlayerHeader(Player player, String header) {
+        player.setPlayerListHeader(header);
+    }
+
+    public static void setPlayerFooter(Player player, String footer) {
+        player.setPlayerListFooter(footer);
+    }
+
+    public static void setPlayerHeaderFooter(Player player, String header, String footer) {
+        player.setPlayerListHeaderFooter(header, footer);
+    }
+
+    public static void setPlayerTabName(Player player, String name) {
+        player.setPlayerListName(name);
+    }
+
+    public static Block getTargetBlock(Player player, int range) {
+        return player.getTargetBlock(null, range);
+    }
+
+    public static void setMaxHealth(Player player, double health) {
+        Objects.requireNonNull(player.getAttribute(Attribute.GENERIC_MAX_HEALTH)).setBaseValue(health);
+    }
+
+    public static Block getBlockBelow(Player player) {
+        return player.getLocation().subtract(0, 1, 0).getBlock();
+    }
+
+    public static void sendPacket(Player player, Object packet) {
+        try {
+            Object handle = player.getClass().getMethod("getHandle").invoke(player);
+            Object playerConnection = handle.getClass().getField("playerConnection").get(handle);
+            playerConnection.getClass().getMethod("sendPacket", BukkitUtils.getNMSClass("Packet")).invoke(playerConnection, packet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static UUID getOfflinePlayerUUID(String name) {
+        return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
     }
 
     public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
