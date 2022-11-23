@@ -107,14 +107,39 @@ sql.close();
 ```
 And a lot more! Most of the queries are ran async, so you don't have to worry about that!
 
-### 8. Updater API!
+### 8. MongoDB Tools/API
+```java
+MongoConnection mongo = new MongoConnection("mongo-db-url", "db-name");
+mongo.createCollection("collection-name");
+String playerName = mongo.getString("collection-name", "playerName");
+int playerKills = mongo.getInt("collection-name", "playerKills");
+mongo.dropCollection("collection-name");
+```
+And a bunch of other useful Mongo-interaction methods! The above example works for any type of document, but you can also use your own POJOs as data archetypes for saving data on the Mongo database! An example is below!
+```java
+MongoConnectionPOJO<Profile> mongoProfiles = new MongoConnectionPOJO("mongo-db-url",  "db-name", "collection-name", Profile.class);
+
+Profile profile = new Profile(player.getUniqueId());
+mongoProfiles.insertOne(profile);
+
+List<Profile> profiles = new ArrayList<>();
+mongoProfiles.into(profiles); //will insert all profile data from the database into the profiles variable
+List<Profile> profiles = mongoProfiles.getAll(); //you can also define the limit and skip if needed
+```
+
+### 9. Updater API and Version API!
 ```java
 Updater updater = new Updater(PLUGININSTANCE, RESOURCEID);
 String latestVersion = updater.getLatest();
 updater.download(); //automatically downloads the newest version!
-```
 
-### 9. Serealizers!
+String version = BukkitUtils.getServerVersion();
+Class<?> clazz1 = BukkitUtils.getNMSClass("MinecraftServer");
+Class<?> clazz2 = BukkitUtils.getOBCClass("CraftWorld");
+```
+It's important not to confuse the Updater's version methods with the BukkitUtils', as the first one refers to the versions of the plugin itself, whilst the second one to the Minecraft server version! BukkitUtils were implemented in 1.0-RC1 (so they will not work in versions below).
+
+### 10. Serealizers!
 To create your own Serealizers, you can implement the `JSONSerealizer<>` and/or `YAMLSerealizer<>` interfaces in your own class!
 SpigotAdditions has a built-in ItemSerealizer class since 0.3, that you can use to serealize ItemStacks to both JSON and YAML!
 ```java
@@ -124,6 +149,47 @@ String jsonFromItem = is.toJson(item);
 ItemStack itemFromYaml = is.fromYaml(yamlString, PLUGINSTANCE);
 String yamlFromItem = is.toYaml(item);
 ```
+
+### 11. Util Classes!
+Introduced in 1.0-RC1, these classes are here to ease up your life and get rid of all that ugly boilerplate code!
+```java
+PlayerUtils.sendActionBar(player, "Hello!");
+PlayerUtils.hidePlayer(player) //will hide/vanish the selected player
+PlayerUtils.banPlayer(player, "Ban Reason");
+PlayerUtils.heal(player);
+PlayerUtils.feed(player);
+PlayerUtils.setMaxHealth(player, 30);
+Block blockBelow = PlayerUtils.getBlockBelow(player);
+PlayerUtils.sendPacket(player, PACKET);
+UUID uuid = PlayerUtils.getOfflinePlayerUUID(playerName);
+```
+And many more player util methods! The `showPlayer()` and `hidePlayer()` methods are even tied to a Listener, so that joining and leaving players won't bug out and see or unneedingly not see the player!
+```java
+ItemUtils.setTag(item, "persistent-tag-key", "persistent-value", PLUGININSTANCE, PersistentDataType.STRING);
+ItemUtils.addLore(item, "Added lore to existing item!");
+ItemUtils.setName(item, "Sword of Testing");
+ItemUtils.setCustomModelData(item, 1);
+ItemUtils.setUnbreakable(true);
+ItemUtils.setDurability(item, 100);
+ItemUtils.clearPotionEffects(item);
+ItemUtils.setBookPages(item, "Page 1");
+ItemUtils.setBookAuthor(item, "ImDaMilan");
+ItemUtils.isArmor(item);
+ItemUtils.isTool(item);
+ItemUtils.isFood(item);
+ItemUtils.isCrop(item);
+```
+And many, many more! There are methods for modifying any type of ItemMeta - Books, Fireworks, Potions, Attributes, Enchants, ItemFlags, and so on! This is by far the longest Util class (and the above showcase is not even half of them!).
+```java
+BukkitUtils.runAsync(() -> System.out.println("This is ran async!"));
+BukkitUtils.getAsync(object, () -> object.setName("test")); //this is used for returning values async, not usually possible in async functions, could be great for returning SQL data for example, the value is returned through the object variable as a CompletableFuture
+BukkitUtils.isVersionHigherThan("Selected MC version");
+BukkitUtils.runTimerAsync(() -> System.out.println("This is ran async!"), 0L, 10L);
+double serverTPS = BukkitUtils.getTPS();
+String withColors = BukkitUtils.getColorCoded("$cWith a custom colorcode prefix!", '$');
+```
+More of these are shown above as part of the Version API!
+Plans for the future are to add more util classes, like EntityUtils, WorldUtils, etc.
 
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
@@ -141,7 +207,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1458616032</version>
+	<version>334e9e26c3</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -153,11 +219,9 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1458616032'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:334e9e26c3'
 }
 ```
-
-[![](https://jitpack.io/v/ImDaMilan/SpigotAdditions.svg)](https://jitpack.io/#ImDaMilan/SpigotAdditions)
 
 ## Additional Credits
 Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
