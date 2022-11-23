@@ -14,6 +14,12 @@ out/
 # Log file
 *.log
 
+*.html
+*.css
+*.js
+
+*.png
+
 # BlueJ files
 *.ctxt
 
@@ -116,3 +122,6 @@ buildNumber.properties
 
 # Common working directory
 run/
+/target/javadoc-bundle-options/javadoc-options-javadoc-resources.xml
+/target/apidocs/element-list
+/target/maven-javadoc-plugin-stale-data.txt
