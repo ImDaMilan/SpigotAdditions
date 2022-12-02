@@ -92,4 +92,12 @@ public class MongoConnectionPOJO<T> extends MongoConnection {
         this.collection.find().limit(limit).skip(skip).into(objects);
         return objects;
     }
+
+    /**
+     * Gets the number of documents in the collection.
+     * @return The number of documents in the collection.
+     */
+    public long getCount() {
+        return this.collection.countDocuments();
+    }
 }
