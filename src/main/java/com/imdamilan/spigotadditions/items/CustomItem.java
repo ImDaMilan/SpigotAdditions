@@ -34,7 +34,7 @@ public class CustomItem {
             meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, sKey);
             item.setItemMeta(meta);
         } else {
-            throw new NullPointerException("The ItemMeta of the item passed to CustomItem constructor must not be null.");
+            throw new NullPointerException("The ItemMeta of the item passed to CustomItem method must not be null.");
         }
         return item;
     }
@@ -60,5 +60,20 @@ public class CustomItem {
     public static boolean isCustomItem(ItemStack item, String nKey, Plugin plugin) {
         return item.hasItemMeta() && item.getItemMeta() != null
                 && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, nKey), PersistentDataType.STRING);
+    }
+
+    public static void addCustomProperty(ItemStack item, String key, String value, Plugin plugin) {
+        NamespacedKey nKey = new NamespacedKey(plugin, key);
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
+        assert meta != null;
+        meta.getPersistentDataContainer().set(nKey, PersistentDataType.STRING, value);
+        item.setItemMeta(meta);
+    }
+
+    public static String getCustomProperty(ItemStack item, String key, Plugin plugin) {
+        NamespacedKey nKey = new NamespacedKey(plugin, key);
+        ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
+        assert meta != null;
+        return meta.getPersistentDataContainer().get(nKey, PersistentDataType.STRING);
     }
 }

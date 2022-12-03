@@ -6,7 +6,7 @@
 
     <groupId>com.imdamilan</groupId>
     <artifactId>SpigotAdditions</artifactId>
-    <version>1.0-RC2</version>
+    <version>1.0-RC3</version>
     <packaging>jar</packaging>
 
     <name>SpigotAdditions</name>
@@ -63,6 +63,7 @@
             <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+
         <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>

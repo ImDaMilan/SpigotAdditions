@@ -7,6 +7,7 @@ import org.bukkit.plugin.Plugin;
 import java.util.concurrent.CompletableFuture;
 
 public class BukkitUtils {
+
     /**
      * @return The version of the server.
      */

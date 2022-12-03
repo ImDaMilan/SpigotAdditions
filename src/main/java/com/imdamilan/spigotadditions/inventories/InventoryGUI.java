@@ -1,8 +1,10 @@
 package com.imdamilan.spigotadditions.inventories;
 
 import com.imdamilan.spigotadditions.SpigotAdditions;
+import com.imdamilan.spigotadditions.items.ItemStackBuilder;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 public class InventoryGUI implements Listener {
 
     private final @Getter Inventory inventory;
+    private final static @Getter ItemStack fillerItem = new ItemStackBuilder(Material.GRAY_STAINED_GLASS_PANE).name("");
     private final @Getter HashMap<Integer, GUIButton> buttons = new HashMap<>();
     private final @Getter ArrayList<Integer> openSlots = new ArrayList<>();
 

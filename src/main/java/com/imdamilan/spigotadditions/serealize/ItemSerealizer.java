@@ -96,22 +96,19 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
             if (meta instanceof Damageable) {
                 itemMetaJSON.addProperty("durability", ((Damageable) meta).getDamage());
             }
-            if (meta instanceof LeatherArmorMeta) {
-                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) meta;
+            if (meta instanceof LeatherArmorMeta leatherArmorMeta) {
                 JsonObject leatherArmorMetaJSON = new JsonObject();
                 leatherArmorMetaJSON.addProperty("color", leatherArmorMeta.getColor().asRGB());
                 itemMetaJSON.add("leatherarmor", leatherArmorMetaJSON);
             }
-            if (meta instanceof SkullMeta) {
-                SkullMeta skullMeta = (SkullMeta) meta;
+            if (meta instanceof SkullMeta skullMeta) {
                 JsonObject skullMetaJSON = new JsonObject();
                 if (skullMeta.hasOwner() && skullMeta.getOwningPlayer() != null) {
                     skullMetaJSON.addProperty("owner", skullMeta.getOwningPlayer().getUniqueId().toString());
                 }
                 itemMetaJSON.add("skull", skullMetaJSON);
             }
-            if (meta instanceof BannerMeta) {
-                BannerMeta bannerMeta = (BannerMeta) meta;
+            if (meta instanceof BannerMeta bannerMeta) {
                 JsonObject bannerMetaJSON = new JsonObject();
                 if (!bannerMeta.getPatterns().isEmpty()) {
                     JsonArray patterns = new JsonArray();
@@ -125,8 +122,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
                 }
                 itemMetaJSON.add("banner", bannerMetaJSON);
             }
-            if (meta instanceof BookMeta) {
-                BookMeta bookMeta = (BookMeta) meta;
+            if (meta instanceof BookMeta bookMeta) {
                 JsonObject bookMetaJSON = new JsonObject();
                 if (bookMeta.hasAuthor()) {
                     bookMetaJSON.addProperty("author", bookMeta.getAuthor());
@@ -141,8 +137,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
                 }
                 itemMetaJSON.add("book", bookMetaJSON);
             }
-            if (meta instanceof EnchantmentStorageMeta) {
-                EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
+            if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
                 JsonObject enchantmentStorageMetaJSON = new JsonObject();
                 if (!enchantmentStorageMeta.getStoredEnchants().isEmpty()) {
                     JsonArray enchants = new JsonArray();
@@ -151,8 +146,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
                 }
                 itemMetaJSON.add("enchantmentstorage", enchantmentStorageMetaJSON);
             }
-            if (meta instanceof FireworkMeta) {
-                FireworkMeta fireworkMeta = (FireworkMeta) meta;
+            if (meta instanceof FireworkMeta fireworkMeta) {
                 JsonObject fireworkMetaJSON = new JsonObject();
                 if (fireworkMeta.hasEffects() && !fireworkMeta.getEffects().isEmpty()) {
                     JsonArray effects = new JsonArray();
@@ -174,8 +168,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
                 fireworkMetaJSON.addProperty("power", fireworkMeta.getPower());
                 itemMetaJSON.add("firework", fireworkMetaJSON);
             }
-            if (meta instanceof MapMeta) {
-                MapMeta mapMeta = (MapMeta) meta;
+            if (meta instanceof MapMeta mapMeta) {
                 JsonObject mapMetaJSON = new JsonObject();
                 if (mapMeta.hasLocationName()) {
                     mapMetaJSON.addProperty("locationname", mapMeta.getLocationName());
@@ -186,8 +179,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
                 mapMetaJSON.addProperty("scaling", mapMeta.isScaling());
                 itemMetaJSON.add("map", mapMetaJSON);
             }
-            if (meta instanceof PotionMeta) {
-                PotionMeta potionMeta = (PotionMeta) meta;
+            if (meta instanceof PotionMeta potionMeta) {
                 JsonObject potionMetaJSON = new JsonObject();
                 if (potionMeta.hasCustomEffects() && !potionMeta.getCustomEffects().isEmpty()) {
                     JsonArray effects = new JsonArray();

@@ -19,7 +19,6 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ItemUtils {
 
@@ -221,7 +220,7 @@ public class ItemUtils {
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         assert meta != null;
         if (meta instanceof PotionMeta) {
-            for (PotionEffectType type : ((PotionMeta) meta).getCustomEffects().stream().map(PotionEffect::getType).collect(Collectors.toList())) {
+            for (PotionEffectType type : ((PotionMeta) meta).getCustomEffects().stream().map(PotionEffect::getType).toList()) {
                 ((PotionMeta) meta).removeCustomEffect(type);
             }
         }
