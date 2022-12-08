@@ -213,6 +213,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
      * @param plugin The instance of the plugin that is deserializing the item.
      * @return The deserialized item.
      */
+    @SuppressWarnings("deprecation")
     @Override
     public ItemStack fromJson(String string, Plugin plugin) {
         Gson gson = new Gson();

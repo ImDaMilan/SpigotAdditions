@@ -2,7 +2,7 @@ package com.imdamilan.spigotadditions.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class PlayerHeadItem {
 
-    private final Player player;
+    private final OfflinePlayer player;
     private final ItemStack item;
 
     /**
@@ -18,7 +18,7 @@ public class PlayerHeadItem {
      * @param player The player of the PlayerHeadItem.
      * @param name The name of the PlayerHeadItem.
      */
-    public PlayerHeadItem(Player player, String name) {
+    public PlayerHeadItem(OfflinePlayer player, String name) {
         this.player = player;
         this.item = new ItemStackBuilder(Material.PLAYER_HEAD).name(name);
     }
@@ -27,7 +27,7 @@ public class PlayerHeadItem {
      * Creates a new PlayerHeadItem with the given player.
      * @param player The player of the PlayerHeadItem.
      */
-    public PlayerHeadItem(Player player) {
+    public PlayerHeadItem(OfflinePlayer player) {
         this(player, player.getName());
     }
 
@@ -37,7 +37,7 @@ public class PlayerHeadItem {
      * @param name The name of the item.
      */
     public PlayerHeadItem(UUID uuid, String name) {
-        this(Bukkit.getPlayer(uuid), name);
+        this(Bukkit.getOfflinePlayer(uuid), name);
     }
 
     /**
@@ -45,7 +45,7 @@ public class PlayerHeadItem {
      * @param uuid The UUID of the player.
      */
     public PlayerHeadItem(UUID uuid) {
-        this(Bukkit.getPlayer(uuid));
+        this(Bukkit.getOfflinePlayer(uuid));
     }
 
     /**

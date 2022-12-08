@@ -206,7 +206,6 @@ public class ItemUtils {
         item.setItemMeta(meta);
     }
 
-
     public static void removePotionEffect(ItemStack item, PotionEffectType type) {
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
         assert meta != null;

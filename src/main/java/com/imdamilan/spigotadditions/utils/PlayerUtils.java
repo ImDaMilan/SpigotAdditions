@@ -88,7 +88,7 @@ public class PlayerUtils {
         }
     }
 
-    public static  void heal(Player player) {
+    public static void heal(Player player) {
         player.setHealth(20);
         player.setFoodLevel(20);
     }
@@ -161,6 +161,10 @@ public class PlayerUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void kill(Player player) {
+        player.setHealth(0);
     }
 
     public static UUID getOfflinePlayerUUID(String name) {
