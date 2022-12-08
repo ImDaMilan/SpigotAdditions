@@ -1,6 +1,9 @@
+
 # SpigotAdditions
 An additional Spigot library aimed to be the dependency that saves developers time from pointless tasks and brings a bunch of useful utilities for Bukkit/Spigot/Paper developers to use!
 --
+[![](https://jitpack.io/v/ImDaMilan/SpigotAdditions.svg)](https://jitpack.io/#ImDaMilan/SpigotAdditions)
+
 This library was heavily inspired by RedLib and SpigotUtils, but it aims to provide more simple features and easier usage! Some of the great features of SpigotAdditions include:
 
  ### 1. An Event Listener + Handler annotation that does everything for you!
@@ -207,7 +210,7 @@ depend: [ SpigotAdditions ]
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>master-SNAPSHOT</version>
+	<version>1.0-RC3</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -219,7 +222,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:master-SNAPSHOT'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.0-RC3'
 }
 ```
 
