@@ -43,6 +43,27 @@ public class InventoryGUI implements Listener {
         this(Bukkit.createInventory(null, size, title));
     }
 
+    /**
+     * Creates a new InventoryGUI with the given title and type.
+     * @param title The title of the inventory.
+     * @param type The type of the inventory.
+     */
+    public InventoryGUI(String title, InventoryType type) {
+        this(Bukkit.createInventory(null, type, title));
+    }
+
+    /**
+     * Creates a new InventoryGUI with the given title and size.
+     * @param size The size of the inventory.
+     * @param title The title of the inventory.
+     */
+    public InventoryGUI(int size, String title) {
+        this(Bukkit.createInventory(null, size, title));
+    }
+
+    /**
+     * @return The first empty slot in the inventory.
+     */
     public int getFirstEmptySlot() {
         return inventory.firstEmpty();
     }
@@ -66,6 +87,17 @@ public class InventoryGUI implements Listener {
     public void addButton(int slot, GUIButton button) {
         inventory.setItem(slot, button.getItem());
         buttons.put(slot, button);
+    }
+
+    /**
+     * Adds a button to the inventory at all the given slots.
+     * @param button The button to add.
+     * @param slots The slots to add the button to.
+     */
+    public void addButton(GUIButton button, int... slots) {
+        for (int slot : slots) {
+            addButton(slot, button);
+        }
     }
 
     /**
