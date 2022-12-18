@@ -9,9 +9,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
-public class ConfigHandler {
+public class ConfigManager {
 
-    public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
+    public <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(Config.class)) {
             Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
@@ -64,11 +64,11 @@ public class ConfigHandler {
         }
     }
 
-    public static <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
+    public <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
         saveToConfig(plugin, clazz);
     }
 
-    public static <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
+    public <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(Config.class)) {
             Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
@@ -116,7 +116,7 @@ public class ConfigHandler {
         return null;
     }
 
-    public static <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
+    public <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
         return getFromConfig(plugin, clazz);
     }
 }
