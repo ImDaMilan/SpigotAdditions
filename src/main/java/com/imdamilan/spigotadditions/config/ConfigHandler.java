@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class ConfigHandler {
 
-    public static <T> void save(Plugin plugin, Class<T> clazz) {
+    public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(Config.class)) {
             Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
@@ -24,6 +24,7 @@ public class ConfigHandler {
                     for (Field field : clazz.getDeclaredFields())
                         if (field.isAnnotationPresent(ConfigKey.class)) key = (String) field.get(object);
                     for (Field field : clazz.getDeclaredFields()) {
+                        field.setAccessible(true);
                         if (field.isAnnotationPresent(Path.class)) {
                             Path path = field.getAnnotation(Path.class);
                             try {
@@ -42,10 +43,80 @@ public class ConfigHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (clazz.isAnnotationPresent(StaticConfig.class)) {
+            StaticConfig config = clazz.getAnnotation(StaticConfig.class);
+            String name = config.value();
+            File file = new File(plugin.getDataFolder(), name);
+            FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(StaticPath.class)) {
+                    StaticPath path = field.getAnnotation(StaticPath.class);
+                    try {
+                        configuration.set(path.value(), field.get(null));
+                        configuration.save(file);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a @Config or @StaticConfig annotation!");
         }
     }
 
-    public static <T> void save(Class<T> clazz, Plugin plugin) {
-        save(plugin, clazz);
+    public static <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
+        saveToConfig(plugin, clazz);
+    }
+
+    public static <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
+        if (clazz.isAnnotationPresent(Config.class)) {
+            Config config = clazz.getAnnotation(Config.class);
+            String name = config.value();
+            File file = new File(plugin.getDataFolder(), name);
+            FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+            ArrayList<T> objects = new ArrayList<>();
+            try {
+                for (String key : configuration.getKeys(false)) {
+                    T object = clazz.getDeclaredConstructor().newInstance();
+                    for (Field field : clazz.getDeclaredFields()) {
+                        if (field.isAnnotationPresent(Path.class)) {
+                            Path path = field.getAnnotation(Path.class);
+                            field.setAccessible(true);
+                            try {
+                                field.set(object, configuration.get(key + path.value()));
+                            } catch (IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                    objects.add(object);
+                }
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            return objects;
+        } else if (clazz.isAnnotationPresent(StaticConfig.class)) {
+            StaticConfig config = clazz.getAnnotation(StaticConfig.class);
+            String name = config.value();
+            File file = new File(plugin.getDataFolder(), name);
+            FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+            for (Field field : clazz.getDeclaredFields()) {
+                if (field.isAnnotationPresent(StaticPath.class)) {
+                    StaticPath path = field.getAnnotation(StaticPath.class);
+                    try {
+                        field.set(null, configuration.get(path.value()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } else {
+            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a @Config or @StaticConfig annotation!");
+        }
+        return null;
+    }
+
+    public static <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
+        return getFromConfig(plugin, clazz);
     }
 }
