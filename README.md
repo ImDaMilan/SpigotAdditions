@@ -233,6 +233,7 @@ For the latest development build use:
 ```
 Keep in mind that development builds are not production-ready and should not be used outside of 
 ### Gradle
+For the latest stable release use:
 ```groovy
 repositories {
 	maven { url 'https://jitpack.io' }
@@ -243,6 +244,16 @@ dependencies {
 	implementation 'com.github.ImDaMilan:SpigotAdditions:7ebae81f87'
 }
 ```
-
+For the latest development build use:
+```groovy
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+```
+```groovy
+dependencies {
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1-RC1'
+}
+```
 ## Additional Credits
 Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
