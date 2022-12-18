@@ -231,7 +231,7 @@ For the latest development build use:
 	<scope>provided</scope>
 </dependency>
 ```
-Keep in mind that development builds are not production-ready and should not be used outside of 
+Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
 ### Gradle
 For the latest stable release use:
 ```groovy
@@ -255,5 +255,6 @@ dependencies {
 	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1-RC1'
 }
 ```
+Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
 ## Additional Credits
 Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
