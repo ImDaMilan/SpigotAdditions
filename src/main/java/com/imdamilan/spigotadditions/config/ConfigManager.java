@@ -49,8 +49,8 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(StaticPath.class)) {
-                    StaticPath path = field.getAnnotation(StaticPath.class);
+                if (field.isAnnotationPresent(Path.class)) {
+                    Path path = field.getAnnotation(Path.class);
                     try {
                         configuration.set(path.value(), field.get(null));
                         configuration.save(file);
@@ -101,8 +101,8 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             for (Field field : clazz.getDeclaredFields()) {
-                if (field.isAnnotationPresent(StaticPath.class)) {
-                    StaticPath path = field.getAnnotation(StaticPath.class);
+                if (field.isAnnotationPresent(Path.class)) {
+                    Path path = field.getAnnotation(Path.class);
                     try {
                         field.set(null, configuration.get(path.value()));
                     } catch (Exception e) {
