@@ -1,9 +1,11 @@
 
+
 # SpigotAdditions
 An additional Spigot library aimed to be the dependency that saves developers time from pointless tasks and brings a bunch of useful utilities for Bukkit/Spigot/Paper developers to use!
 --
+[![](https://jitpack.io/v/ImDaMilan/SpigotAdditions.svg)](https://jitpack.io/#ImDaMilan/SpigotAdditions)
 
-This library was heavily inspired by RedLib and SpigotUtils, but it aims to provide more simple features and easier usage! Some of the great features of SpigotAdditions include:
+This library was heavily inspired by RedLib, Spiglin, SpigotUtils, but it aims to provide more simple features and easier usage! Some of the great features of SpigotAdditions include:
 
  ### 1. An Event Listener + Handler annotation that does everything for you!
 
@@ -199,6 +201,7 @@ To use SpigotAdditions, you can use it as a dependency (or softdepend) in your p
 depend: [ SpigotAdditions ]
 ```
 ### Maven
+For the latest stable release use:
 ```xml
 <repository>
 	<id>jitpack.io</id>
@@ -213,7 +216,24 @@ depend: [ SpigotAdditions ]
 	<scope>provided</scope>
 </dependency>
 ```
+For the latest development build use:
+```xml
+<repository>
+	<id>jitpack.io</id>
+	<url>https://jitpack.io</url>
+</repository>
+```
+```xml
+<dependency>
+	<groupId>com.github.ImDaMilan</groupId>
+	<artifactId>SpigotAdditions</artifactId>
+	<version>1.1-RC1</version>
+	<scope>provided</scope>
+</dependency>
+```
+Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
 ### Gradle
+For the latest stable release use:
 ```groovy
 repositories {
 	maven { url 'https://jitpack.io' }
@@ -224,6 +244,17 @@ dependencies {
 	implementation 'com.github.ImDaMilan:SpigotAdditions:7ebae81f87'
 }
 ```
-
+For the latest development build use:
+```groovy
+repositories {
+	maven { url 'https://jitpack.io' }
+}
+```
+```groovy
+dependencies {
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1-RC1'
+}
+```
+Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
 ## Additional Credits
 Big thank you to [HSGamer](https://www.spigotmc.org/members/hsgamer.248240/) on Spigot for helping with the command syncing for the Command annotation!
