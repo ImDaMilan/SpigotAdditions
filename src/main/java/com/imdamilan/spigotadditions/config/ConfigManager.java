@@ -21,8 +21,10 @@ public class ConfigManager {
                 ArrayList<T> objects = (ArrayList<T>) clazz.getDeclaredMethod("getObjects").invoke(null);
                 for (Object object : objects) {
                     String key = "";
-                    for (Field field : clazz.getDeclaredFields())
+                    for (Field field : clazz.getDeclaredFields()) {
+                        field.setAccessible(true);
                         if (field.isAnnotationPresent(ConfigKey.class)) key = (String) field.get(object);
+                    }
                     for (Field field : clazz.getDeclaredFields()) {
                         field.setAccessible(true);
                         if (field.isAnnotationPresent(Path.class)) {
@@ -49,6 +51,7 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             for (Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
                 if (field.isAnnotationPresent(Path.class)) {
                     Path path = field.getAnnotation(Path.class);
                     try {
@@ -79,9 +82,9 @@ public class ConfigManager {
                 for (String key : configuration.getKeys(false)) {
                     T object = clazz.getDeclaredConstructor().newInstance();
                     for (Field field : clazz.getDeclaredFields()) {
+                        field.setAccessible(true);
                         if (field.isAnnotationPresent(Path.class)) {
                             Path path = field.getAnnotation(Path.class);
-                            field.setAccessible(true);
                             try {
                                 field.set(object, configuration.get(key + path.value()));
                             } catch (IllegalAccessException e) {
@@ -101,6 +104,7 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             for (Field field : clazz.getDeclaredFields()) {
+                field.setAccessible(true);
                 if (field.isAnnotationPresent(Path.class)) {
                     Path path = field.getAnnotation(Path.class);
                     try {
