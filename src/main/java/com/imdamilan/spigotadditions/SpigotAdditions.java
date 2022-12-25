@@ -3,7 +3,6 @@ package com.imdamilan.spigotadditions;
 import com.imdamilan.spigotadditions.commands.CommandRegistry;
 import com.imdamilan.spigotadditions.events.Listeners;
 import lombok.Getter;
-import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,7 +20,5 @@ public final class SpigotAdditions extends JavaPlugin {
                 CommandRegistry.register();
             }
         }.runTaskLater(this, 1);
-
-        new Metrics(this, 17112);
     }
 }

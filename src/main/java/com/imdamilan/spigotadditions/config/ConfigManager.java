@@ -32,7 +32,7 @@ public class ConfigManager {
                             String name1 = path.value();
                             if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                configuration.set(key + name1, field.get(object));
+                                configuration.set(key + "." + name1, field.get(object));
                                 configuration.save(file);
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
@@ -92,7 +92,7 @@ public class ConfigManager {
                             String name1 = path.value();
                             if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                field.set(object, configuration.get(key + name1));
+                                field.set(object, configuration.get(key + "." + name1));
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }
