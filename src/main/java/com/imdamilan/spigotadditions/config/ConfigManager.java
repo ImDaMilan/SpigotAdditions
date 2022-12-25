@@ -29,8 +29,10 @@ public class ConfigManager {
                         field.setAccessible(true);
                         if (field.isAnnotationPresent(Path.class)) {
                             Path path = field.getAnnotation(Path.class);
+                            String name1 = path.value();
+                            if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                configuration.set(key + path.value(), field.get(object));
+                                configuration.set(key + name1, field.get(object));
                                 configuration.save(file);
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
@@ -54,8 +56,10 @@ public class ConfigManager {
                 field.setAccessible(true);
                 if (field.isAnnotationPresent(Path.class)) {
                     Path path = field.getAnnotation(Path.class);
+                    String name1 = path.value();
+                    if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                     try {
-                        configuration.set(path.value(), field.get(null));
+                        configuration.set(name1, field.get(null));
                         configuration.save(file);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -85,8 +89,10 @@ public class ConfigManager {
                         field.setAccessible(true);
                         if (field.isAnnotationPresent(Path.class)) {
                             Path path = field.getAnnotation(Path.class);
+                            String name1 = path.value();
+                            if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                field.set(object, configuration.get(key + path.value()));
+                                field.set(object, configuration.get(key + name1));
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }
@@ -107,8 +113,10 @@ public class ConfigManager {
                 field.setAccessible(true);
                 if (field.isAnnotationPresent(Path.class)) {
                     Path path = field.getAnnotation(Path.class);
+                    String name1 = path.value();
+                    if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                     try {
-                        field.set(null, configuration.get(path.value()));
+                        field.set(null, configuration.get(name1));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -379,6 +379,7 @@ public class ItemUtils {
     }
 
     public static boolean isCrop(ItemStack item) {
-        return item.getType().equals(Material.WHEAT) || item.getType().equals(Material.CARROT) || item.getType().equals(Material.POTATO) || item.getType().equals(Material.BEETROOT) || item.getType().equals(Material.NETHER_WART) || item.getType().equals(Material.COCOA) || item.getType().equals(Material.SUGAR_CANE) || item.getType().equals(Material.CACTUS) || item.getType().equals(Material.MELON_STEM) || item.getType().equals(Material.PUMPKIN_STEM);
+        Material type = item.getType();
+        return type.equals(Material.WHEAT) || type.equals(Material.CARROT) || type.equals(Material.POTATO) || type.equals(Material.BEETROOT) || type.equals(Material.NETHER_WART) || type.equals(Material.COCOA) || type.equals(Material.SUGAR_CANE) || type.equals(Material.CACTUS) || type.equals(Material.MELON_STEM) || type.equals(Material.PUMPKIN_STEM);
     }
 }
