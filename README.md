@@ -198,8 +198,8 @@ Plans for the future are to add more util classes, like EntityUtils, WorldUtils,
 You can use SpigotAdditions' Config API, introduced in 1.1, to save classes with static fields to a config file and easily manipulate those fields and file without messing with config classes and Spigot's YamlConfiguration and so on.
 ```java
 public @Config class MainConfig {
-	private static @Path("welcome-message") String welcomeMessage = "Welcome";
-	private static @Path String leaveMessage = "Goodbye!";
+    private static @Path("welcome-message") String welcomeMessage = "Welcome";
+    private static @Path String leaveMessage = "Goodbye!";
 }
 
 ConfigManager.saveToConfig(PLUGININSTANCE, MainConfig.class);
@@ -214,25 +214,26 @@ You can set which file you want to save the config to by passing it to the Confi
 SpigotAdditions also supports a similar way of saving data to a YAML file.
 ```java
 public @DataFile("playerdata.yml") class PlayerProfile {
-	private @ObjectKey String playerName;
-	private @Path int level;
-	private @Path int strength;
-	private @Path int dexterity;
-	public static ArrayList<PlayerProfile> objects = new ArrayList<>();
 
-	public PlayerProfile() {}
+    private @ObjectKey String playerName;
+    private @Path int level;
+    private @Path int strength;
+    private @Path int dexterity;
+    public static ArrayList<PlayerProfile> objects = new ArrayList<>();
 
-	public PlayerProfile(String playerName, int level, int strength, int dexterity) {
-		this.playerName = playerName;
-		this.level = level;
-		this.strength = strength;
-		this.dexterity = dexterity;
-		objects.add(this);
-	}
+    public PlayerProfile() {}
 
-	public static ArrayList<PlayerProfile> getObjects() {
-		return objects;
-	}
+    public PlayerProfile(String playerName, int level, int strength, int dexterity) {
+        this.playerName = playerName;
+        this.level = level;
+        this.strength = strength;
+        this.dexterity = dexterity;
+        objects.add(this);
+    }
+
+    public static ArrayList<PlayerProfile> getObjects() {
+        return objects;
+    }
 }
 
 ConfigManager.saveToConfig(PLUGININSTANCE, PlayerProfile.class);
@@ -249,17 +250,17 @@ There's a lot to unpack here, so let's start off:
 An example of the output of a `playerdata.yml` file would be:
 ```yaml
 ImDaMilan:
-	level: 100
-	strength: 100
-	dexterity: 150
+    level: 100
+    strength: 100
+    dexterity: 150
 Player2:
-	level: 50
-	strength: 10
-	dexterity: 100
+    level: 50
+    strength: 10
+    dexterity: 100
 ThirdPlayer:
-	level: 50
-	strength: 10
-	dexterity: 100
+    level: 50
+    strength: 10
+    dexterity: 100
 ```
 In the example above, we have 3 objects, where the object keys / names of the players are ImDaMilan, Player2 and ThirdPlayer, the `level` variables are 100, 50 and 50, and so on.
 
