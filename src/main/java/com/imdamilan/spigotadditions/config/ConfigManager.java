@@ -12,9 +12,9 @@ import java.util.ArrayList;
 public class ConfigManager {
 
     public <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
-        if (clazz.isAnnotationPresent(Config.class)) {
-            Config config = clazz.getAnnotation(Config.class);
-            String name = config.value();
+        if (clazz.isAnnotationPresent(DataFile.class)) {
+            DataFile dataFile = clazz.getAnnotation(DataFile.class);
+            String name = dataFile.value();
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             try {
@@ -23,7 +23,7 @@ public class ConfigManager {
                     String key = "";
                     for (Field field : clazz.getDeclaredFields()) {
                         field.setAccessible(true);
-                        if (field.isAnnotationPresent(ConfigKey.class)) key = (String) field.get(object);
+                        if (field.isAnnotationPresent(ObjectKey.class)) key = (String) field.get(object);
                     }
                     for (Field field : clazz.getDeclaredFields()) {
                         field.setAccessible(true);
@@ -43,12 +43,12 @@ public class ConfigManager {
             } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
                 throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a static getObjects() method that returns an ArrayList of objects!");
             } catch (ClassCastException e ) {
-                throw new RuntimeException("The class " + clazz.getSimpleName() + " doesn't have a valid @ConfigKey string field!");
+                throw new RuntimeException("The class " + clazz.getSimpleName() + " doesn't have a valid @ObjectKey string field!");
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (clazz.isAnnotationPresent(StaticConfig.class)) {
-            StaticConfig config = clazz.getAnnotation(StaticConfig.class);
+        } else if (clazz.isAnnotationPresent(Config.class)) {
+            Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
@@ -67,7 +67,7 @@ public class ConfigManager {
                 }
             }
         } else {
-            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a @Config or @StaticConfig annotation!");
+            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have an @DataFile or @Config annotation!");
         }
     }
 
@@ -76,9 +76,9 @@ public class ConfigManager {
     }
 
     public <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
-        if (clazz.isAnnotationPresent(Config.class)) {
-            Config config = clazz.getAnnotation(Config.class);
-            String name = config.value();
+        if (clazz.isAnnotationPresent(DataFile.class)) {
+            DataFile dataFile = clazz.getAnnotation(DataFile.class);
+            String name = dataFile.value();
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ArrayList<T> objects = new ArrayList<>();
@@ -104,8 +104,8 @@ public class ConfigManager {
                 e.printStackTrace();
             }
             return objects;
-        } else if (clazz.isAnnotationPresent(StaticConfig.class)) {
-            StaticConfig config = clazz.getAnnotation(StaticConfig.class);
+        } else if (clazz.isAnnotationPresent(Config.class)) {
+            Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
@@ -123,7 +123,7 @@ public class ConfigManager {
                 }
             }
         } else {
-            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a @Config or @StaticConfig annotation!");
+            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have an @DataFile or @Config annotation!");
         }
         return null;
     }
