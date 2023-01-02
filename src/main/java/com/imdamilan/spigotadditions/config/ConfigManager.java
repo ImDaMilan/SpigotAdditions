@@ -11,6 +11,12 @@ import java.util.ArrayList;
 
 public class ConfigManager {
 
+    /**
+     * Saves all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation to the specified file.
+     * @param plugin The plugin instance.
+     * @param clazz The class with the annotated fields.
+     * @param <T> The type of the class.
+     */
     public <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
@@ -71,10 +77,23 @@ public class ConfigManager {
         }
     }
 
+    /**
+     * Loads all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation from the specified file.
+     * @param clazz The class with the annotated fields.
+     * @param plugin The plugin instance.
+     * @param <T> The type of the class.
+     */
     public <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
         saveToConfig(plugin, clazz);
     }
 
+    /**
+     * Loads all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation from the specified file.
+     * @param plugin The plugin instance.
+     * @param clazz The class with the annotated fields.
+     * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
+     * @param <T> The type of the class.
+     */
     public <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
@@ -101,7 +120,7 @@ public class ConfigManager {
                     objects.add(object);
                 }
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
+                throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a default no-args constructor!");
             }
             return objects;
         } else if (clazz.isAnnotationPresent(Config.class)) {
@@ -128,6 +147,13 @@ public class ConfigManager {
         return null;
     }
 
+    /**
+     * Loads all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation from the specified file.
+     * @param clazz The class with the annotated fields.
+     * @param plugin The plugin instance.
+     * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
+     * @param <T> The type of the class.
+     */
     public <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
         return getFromConfig(plugin, clazz);
     }

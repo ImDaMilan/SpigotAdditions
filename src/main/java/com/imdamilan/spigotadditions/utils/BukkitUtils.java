@@ -3,6 +3,7 @@ package com.imdamilan.spigotadditions.utils;
 import com.imdamilan.spigotadditions.SpigotAdditions;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -79,97 +80,115 @@ public class BukkitUtils {
      * Runs a runnable asynchronously.
      * @param runnable The runnable to run asynchronously.
      */
-    public static void runAsync(Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(SpigotAdditions.getInstance(), runnable);
+    public static BukkitTask runAsync(Runnable runnable) {
+        return Bukkit.getScheduler().runTaskAsynchronously(SpigotAdditions.getInstance(), runnable);
     }
 
     /**
      * Runs a runnable asynchronously as the given plugin.
-     * @param plugin The plugin to run the runnable as.
+     *
+     * @param plugin   The plugin to run the runnable as.
      * @param runnable The runnable to run asynchronously.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runAsync(Plugin plugin, Runnable runnable) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
+    public static BukkitTask runAsync(Plugin plugin, Runnable runnable) {
+        return Bukkit.getScheduler().runTaskAsynchronously(plugin, runnable);
     }
 
     /**
      * Runs the runnable after the given delay.
+     *
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
+     * @param delay    The delay in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runLater(Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLater(SpigotAdditions.getInstance(), runnable, delay);
+    public static BukkitTask runLater(Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLater(SpigotAdditions.getInstance(), runnable, delay);
     }
 
     /**
      * Runs the runnable after the given delay as the given plugin.
-     * @param plugin The plugin to run the runnable as.
+     *
+     * @param plugin   The plugin to run the runnable as.
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
+     * @param delay    The delay in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runLater(Plugin plugin, Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
+    public static BukkitTask runLater(Plugin plugin, Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLater(plugin, runnable, delay);
     }
 
     /**
      * Runs the runnable after the given delay asynchronously.
+     *
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
+     * @param delay    The delay in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runLaterAsync(Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(SpigotAdditions.getInstance(), runnable, delay);
+    public static BukkitTask runLaterAsync(Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLaterAsynchronously(SpigotAdditions.getInstance(), runnable, delay);
     }
 
     /**
      * Runs the runnable after the given delay asynchronously as the given plugin.
-     * @param plugin The plugin to run the runnable as.
+     *
+     * @param plugin   The plugin to run the runnable as.
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
+     * @param delay    The delay in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runLaterAsync(Plugin plugin, Runnable runnable, long delay) {
-        Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
+    public static BukkitTask runLaterAsync(Plugin plugin, Runnable runnable, long delay) {
+        return Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, runnable, delay);
     }
 
     /**
      * Runs the runnable as a repeating task.
+     *
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
-     * @param period The period of repeating in ticks.
+     * @param delay    The delay in ticks.
+     * @param period   The period of repeating in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runTimer(Runnable runnable, long delay, long period) {
-        Bukkit.getScheduler().runTaskTimer(SpigotAdditions.getInstance(), runnable, delay, period);
+    public static BukkitTask runTimer(Runnable runnable, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimer(SpigotAdditions.getInstance(), runnable, delay, period);
     }
 
     /**
      * Runs the runnable as a repeating task as the given plugin.
-     * @param plugin The plugin to run the runnable as.
+     *
+     * @param plugin   The plugin to run the runnable as.
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
-     * @param period The period of repeating in ticks.
+     * @param delay    The delay in ticks.
+     * @param period   The period of repeating in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runTimer(Plugin plugin, Runnable runnable, long delay, long period) {
-        Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, period);
+    public static BukkitTask runTimer(Plugin plugin, Runnable runnable, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimer(plugin, runnable, delay, period);
     }
 
     /**
      * Runs the runnable as a repeating task asynchronously.
+     *
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
-     * @param period The period of repeating in ticks.
+     * @param delay    The delay in ticks.
+     * @param period   The period of repeating in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runTimerAsync(Runnable runnable, long delay, long period) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(SpigotAdditions.getInstance(), runnable, delay, period);
+    public static BukkitTask runTimerAsync(Runnable runnable, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimerAsynchronously(SpigotAdditions.getInstance(), runnable, delay, period);
     }
 
     /**
      * Runs the runnable as a repeating task asynchronously as the given plugin.
-     * @param plugin The plugin to run the runnable as.
+     *
+     * @param plugin   The plugin to run the runnable as.
      * @param runnable The runnable to run.
-     * @param delay The delay in ticks.
-     * @param period The period of repeating in ticks.
+     * @param delay    The delay in ticks.
+     * @param period   The period of repeating in ticks.
+     * @return The BukkitTask of the runnable.
      */
-    public static void runTimerAsync(Plugin plugin, Runnable runnable, long delay, long period) {
-        Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, period);
+    public static BukkitTask runTimerAsync(Plugin plugin, Runnable runnable, long delay, long period) {
+        return Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, runnable, delay, period);
     }
 
     /**
