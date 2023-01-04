@@ -17,7 +17,7 @@ public class ConfigManager {
      * @param clazz The class with the annotated fields.
      * @param <T> The type of the class.
      */
-    public <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
+    public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -83,7 +83,7 @@ public class ConfigManager {
      * @param plugin The plugin instance.
      * @param <T> The type of the class.
      */
-    public <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
+    public static <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
         saveToConfig(plugin, clazz);
     }
 
@@ -94,7 +94,7 @@ public class ConfigManager {
      * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
      * @param <T> The type of the class.
      */
-    public <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
+    public static <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -127,20 +127,7 @@ public class ConfigManager {
             Config config = clazz.getAnnotation(Config.class);
             String name = config.value();
             File file = new File(plugin.getDataFolder(), name);
-            FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            for (Field field : clazz.getDeclaredFields()) {
-                field.setAccessible(true);
-                if (field.isAnnotationPresent(Path.class)) {
-                    Path path = field.getAnnotation(Path.class);
-                    String name1 = path.value();
-                    if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
-                    try {
-                        field.set(null, configuration.get(name1));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+            getValue(clazz, file);
         } else {
             throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have an @DataFile or @Config annotation!");
         }
@@ -154,7 +141,35 @@ public class ConfigManager {
      * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
      * @param <T> The type of the class.
      */
-    public <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
+    public static <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
         return getFromConfig(plugin, clazz);
+    }
+
+    public static void configFileToClass(Class<?> clazz) {
+        if (clazz.isAnnotationPresent(Config.class)) {
+            Config config = clazz.getAnnotation(Config.class);
+            String name = config.value();
+            File file = new File(name);
+            getValue(clazz, file);
+        } else {
+            throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have an @Config annotation!");
+        }
+    }
+
+    private static void getValue(Class<?> clazz, File file) {
+        FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.isAnnotationPresent(Path.class)) {
+                Path path = field.getAnnotation(Path.class);
+                String name1 = path.value();
+                if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                try {
+                    field.set(null, configuration.get(name1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
