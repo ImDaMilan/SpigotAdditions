@@ -1,5 +1,4 @@
 
-
 # SpigotAdditions
 An additional Spigot library aimed to be the dependency that saves developers time from pointless tasks and brings a bunch of useful utilities for Bukkit/Spigot/Paper developers to use!
 --
@@ -195,6 +194,76 @@ String withColors = BukkitUtils.getColorCoded("$cWith a custom colorcode prefix!
 More of these are shown above as part of the Version API!
 Plans for the future are to add more util classes, like EntityUtils, WorldUtils, etc.
 
+### 13. Config and DataFile APIs!
+You can use SpigotAdditions' Config API, introduced in 1.1, to save classes with static fields to a config file and easily manipulate those fields and file without messing with config classes and Spigot's YamlConfiguration and so on.
+```java
+public @Config class MainConfig {
+    private static @Path("welcome-message") String welcomeMessage = "Welcome";
+    private static @Path String leaveMessage = "Goodbye!";
+}
+
+ConfigManager.saveToConfig(PLUGININSTANCE, MainConfig.class);
+```
+The above will create the following structure in the config.yml file:
+```yaml
+welcome-message: Welcome
+leaveMessage: Goodbye!
+```
+You can set which file you want to save the config to by passing it to the Config annotation, `@Config("test.yml")`, and keep in mind that if the Path annotation is empty, it the config member takes the name of the field, otherwhise, it takes the name of the parameter passed to it!
+
+SpigotAdditions also supports a similar way of saving data to a YAML file.
+```java
+public @DataFile("playerdata.yml") class PlayerProfile {
+
+    private @ObjectKey String playerName;
+    private @Path int level;
+    private @Path int strength;
+    private @Path int dexterity;
+    public static ArrayList<PlayerProfile> objects = new ArrayList<>();
+
+    public PlayerProfile() {}
+
+    public PlayerProfile(String playerName, int level, int strength, int dexterity) {
+        this.playerName = playerName;
+        this.level = level;
+        this.strength = strength;
+        this.dexterity = dexterity;
+        objects.add(this);
+    }
+
+    public static ArrayList<PlayerProfile> getObjects() {
+        return objects;
+    }
+}
+
+ConfigManager.saveToConfig(PLUGININSTANCE, PlayerProfile.class);
+ArrayList<PlayerProfile> profiles = ConfigManager.getFromConfig(PLUGININSTANCE, PlayerProfile.class);
+```
+There's a lot to unpack here, so let's start off:
+
+ 1. The class must have the `@DataFile("file-path.yml")` annotation.
+ 2. The class must have only 1 `@ObjectKey` annotated field, that separates the objects in the file.
+ 3. The `@Path` works the same as in the Config API.
+ 4. The class must have an empty no-args constructor.
+ 5. The class must include a static `getObjects()` method that returns all objects instantiated.
+
+An example of the output of a `playerdata.yml` file would be:
+```yaml
+ImDaMilan:
+    level: 100
+    strength: 100
+    dexterity: 150
+Player2:
+    level: 50
+    strength: 10
+    dexterity: 100
+ThirdPlayer:
+    level: 50
+    strength: 10
+    dexterity: 100
+```
+In the example above, we have 3 objects, where the object keys / names of the players are ImDaMilan, Player2 and ThirdPlayer, the `level` variables are 100, 50 and 50, and so on.
+
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
 ```yml
@@ -212,7 +281,7 @@ For the latest stable release use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>7ebae81f87</version>
+	<version>1.1</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -227,7 +296,7 @@ For the latest development build use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.1-RC2</version>
+	<version>1.1</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -241,7 +310,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:7ebae81f87'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1'
 }
 ```
 For the latest development build use:
@@ -252,7 +321,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1-RC2'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1'
 }
 ```
 Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
