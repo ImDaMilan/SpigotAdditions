@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 
+@Deprecated
 public class AnnotationCommand extends BukkitCommand {
 
     private final Command annotation;
