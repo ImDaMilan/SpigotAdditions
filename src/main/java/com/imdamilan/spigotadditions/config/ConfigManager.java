@@ -11,13 +11,29 @@ import java.util.ArrayList;
 
 public class ConfigManager {
 
+    public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
+        saveToFile(plugin, clazz);
+    }
+
+    public static <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
+        saveToFile(plugin, clazz);
+    }
+
+    public static <T> void getFromConfig(Plugin plugin, Class<T> clazz) {
+        getFromFile(plugin, clazz);
+    }
+
+    public static <T> void getFromConfig(Class<T> clazz, Plugin plugin) {
+        getFromFile(plugin, clazz);
+    }
+
     /**
      * Saves all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation to the specified file.
      * @param plugin The plugin instance.
      * @param clazz The class with the annotated fields.
      * @param <T> The type of the class.
      */
-    public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
+    public static <T> void saveToFile(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -38,7 +54,11 @@ public class ConfigManager {
                             String name1 = path.value();
                             if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                configuration.set(key + "." + name1, field.get(object));
+                                if (!field.getType().isEnum()) {
+                                    configuration.set(key + "." + name1, field.get(object));
+                                } else {
+                                    configuration.set(key + "." + name1, field.get(object).toString());
+                                }
                                 configuration.save(file);
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
@@ -65,7 +85,11 @@ public class ConfigManager {
                     String name1 = path.value();
                     if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                     try {
-                        configuration.set(name1, field.get(null));
+                        if (!field.getType().isEnum()) {
+                            configuration.set(name1, field.get(null));
+                        } else {
+                            configuration.set(name1, field.get(null).toString());
+                        }
                         configuration.save(file);
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -83,8 +107,8 @@ public class ConfigManager {
      * @param plugin The plugin instance.
      * @param <T> The type of the class.
      */
-    public static <T> void saveToConfig(Class<T> clazz, Plugin plugin) {
-        saveToConfig(plugin, clazz);
+    public static <T> void saveToFile(Class<T> clazz, Plugin plugin) {
+        saveToFile(plugin, clazz);
     }
 
     /**
@@ -94,7 +118,7 @@ public class ConfigManager {
      * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
      * @param <T> The type of the class.
      */
-    public static <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
+    public static <T> ArrayList<T> getFromFile(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -111,7 +135,11 @@ public class ConfigManager {
                             String name1 = path.value();
                             if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                             try {
-                                field.set(object, configuration.get(key + "." + name1));
+                                if (!field.getType().isEnum()) {
+                                    field.set(object, configuration.get(key + "." + name1));
+                                } else {
+                                    field.set(object, Enum.valueOf((Class<Enum>) field.getType(), configuration.getString(key + "." + name1)));
+                                }
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }
@@ -141,8 +169,8 @@ public class ConfigManager {
      * @return An ArrayList of objects of the specified class if it is a DataFile, or null if it is a Config class.
      * @param <T> The type of the class.
      */
-    public static <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
-        return getFromConfig(plugin, clazz);
+    public static <T> ArrayList<T> getFromFile(Class<T> clazz, Plugin plugin) {
+        return getFromFile(plugin, clazz);
     }
 
     public static void configFileToClass(Class<?> clazz) {
@@ -165,7 +193,11 @@ public class ConfigManager {
                 String name1 = path.value();
                 if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                 try {
-                    field.set(null, configuration.get(name1));
+                    if (!field.getType().isEnum()) {
+                        field.set(null, configuration.get(name1));
+                    } else {
+                        field.set(null, Enum.valueOf((Class<Enum>) field.getType(), configuration.getString(name1)));
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
