@@ -35,7 +35,6 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
      */
     @Override
     public String toJson(ItemStack item) {
-        Gson gson = new Gson();
         JsonObject itemJSON = new JsonObject();
         itemJSON.addProperty("type", item.getType().name());
         itemJSON.addProperty("amount", item.getAmount());
@@ -204,7 +203,7 @@ public class ItemSerealizer implements JSONSerealizer<ItemStack>, YAMLSerealizer
             }
             itemJSON.add("meta", itemMetaJSON);
         }
-        return gson.toJson(itemJSON);
+        return new Gson().toJson(itemJSON);
     }
 
     /**
