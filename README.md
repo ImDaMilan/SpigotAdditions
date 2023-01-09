@@ -202,7 +202,7 @@ public @Config class MainConfig {
     private static @Path String leaveMessage = "Goodbye!";
 }
 
-ConfigManager.saveToConfig(PLUGININSTANCE, MainConfig.class);
+ConfigManager.saveToFile(PLUGININSTANCE, MainConfig.class);
 ```
 The above will create the following structure in the config.yml file:
 ```yaml
@@ -236,8 +236,8 @@ public @DataFile("playerdata.yml") class PlayerProfile {
     }
 }
 
-ConfigManager.saveToConfig(PLUGININSTANCE, PlayerProfile.class);
-ArrayList<PlayerProfile> profiles = ConfigManager.getFromConfig(PLUGININSTANCE, PlayerProfile.class);
+ConfigManager.saveToFile(PLUGININSTANCE, PlayerProfile.class);
+ArrayList<PlayerProfile> profiles = ConfigManager.getFromFile(PLUGININSTANCE, PlayerProfile.class);
 ```
 There's a lot to unpack here, so let's start off:
 
@@ -281,7 +281,7 @@ For the latest stable release use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -296,7 +296,7 @@ For the latest development build use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -310,7 +310,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1.1'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1.2'
 }
 ```
 For the latest development build use:
@@ -321,7 +321,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1.1'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.1.2'
 }
 ```
 Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
