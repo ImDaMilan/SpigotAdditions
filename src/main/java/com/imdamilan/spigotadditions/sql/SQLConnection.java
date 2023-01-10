@@ -53,21 +53,28 @@ public class SQLConnection {
         }
     }
 
+    private void executeQuery(String query) {
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.executeUpdate();
+            statement.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Runs an async update query ran by the given plugin.
      * @param plugin The plugin that runs the async update query (used for the BukkitRunnable, usually the instance of this plugin).
      * @param query The query to run.
+     * @param async Whether the query should be run async or not.
      */
-    public void execute(Plugin plugin, String query) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            try {
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.executeUpdate();
-                statement.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+    public void execute(Plugin plugin, String query, boolean async) {
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> executeQuery(query));
+        } else {
+            executeQuery(query);
+        }
     }
 
     /**
@@ -75,15 +82,7 @@ public class SQLConnection {
      * @param query The query to run.
      */
     public void execute(String query) {
-        Bukkit.getScheduler().runTaskAsynchronously(SpigotAdditions.getInstance(), () -> {
-            try {
-                PreparedStatement statement = connection.prepareStatement(query);
-                statement.executeUpdate();
-                statement.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        execute(SpigotAdditions.getInstance(), query, true);
     }
 
     /**

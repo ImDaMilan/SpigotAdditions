@@ -62,6 +62,13 @@ public class CustomItem {
                 && item.getItemMeta().getPersistentDataContainer().has(new NamespacedKey(plugin, nKey), PersistentDataType.STRING);
     }
 
+    /**
+     * Adds a custom property to the item via PersistentDataContainer.
+     * @param item The ItemStack to add the property to.
+     * @param key The key of the property, must be unique, lowercase, and contain no spaces.
+     * @param value The value of the property.
+     * @param plugin The instance of the plugin that registered the item.
+     */
     public static void addCustomProperty(ItemStack item, String key, String value, Plugin plugin) {
         NamespacedKey nKey = new NamespacedKey(plugin, key);
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());
@@ -70,6 +77,13 @@ public class CustomItem {
         item.setItemMeta(meta);
     }
 
+    /**
+     * Gets the value of a custom property from the item via PersistentDataContainer.
+     * @param item The ItemStack to get the property from.
+     * @param key The key of the property.
+     * @param plugin The instance of the plugin that registered the item.
+     * @return The value of the property, or null if the property does not exist.
+     */
     public static String getCustomProperty(ItemStack item, String key, Plugin plugin) {
         NamespacedKey nKey = new NamespacedKey(plugin, key);
         ItemMeta meta = item.hasItemMeta() ? item.getItemMeta() : Bukkit.getItemFactory().getItemMeta(item.getType());

@@ -12,6 +12,11 @@ import java.util.Objects;
 
 public class InventorySerealizer implements JSONSerealizer<Inventory>, YAMLSerealizer<Inventory> {
 
+    /**
+     * Serializes an inventory to a JSON string.
+     * @param inventory The object to be serialized.
+     * @return The JSON string.
+     */
     @Override
     public String toJson(Inventory inventory) {
         ItemSerealizer is = new ItemSerealizer();
@@ -24,6 +29,12 @@ public class InventorySerealizer implements JSONSerealizer<Inventory>, YAMLSerea
         return new Gson().toJson(array);
     }
 
+    /**
+     * Deserializes an inventory from a JSON string.
+     * @param string The String to be deserialized.
+     * @param plugin The instance of the plugin that is deserializing the object.
+     * @return The deserialized object.
+     */
     @Override
     public Inventory fromJson(String string, Plugin plugin) {
         ItemSerealizer is = new ItemSerealizer();
@@ -35,6 +46,11 @@ public class InventorySerealizer implements JSONSerealizer<Inventory>, YAMLSerea
         return inventory;
     }
 
+    /**
+     * Serializes an inventory to a YAML string.
+     * @param object The object to be serialized.
+     * @return The YAML string.
+     */
     @Override
     public String toYaml(Inventory object) {
         try {
@@ -44,6 +60,12 @@ public class InventorySerealizer implements JSONSerealizer<Inventory>, YAMLSerea
         }
     }
 
+    /**
+     * Deserializes an inventory from a YAML string.
+     * @param string The String to be deserialized.
+     * @param plugin The instance of the plugin that is deserializing the object.
+     * @return The deserialized object.
+     */
     @Override
     public Inventory fromYaml(String string, Plugin plugin) {
         try {
