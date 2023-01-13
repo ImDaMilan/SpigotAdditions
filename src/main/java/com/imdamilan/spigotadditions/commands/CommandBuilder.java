@@ -1,5 +1,6 @@
 package com.imdamilan.spigotadditions.commands;
 
+import com.imdamilan.spigotadditions.commands.function.CommandExecutor;
 import com.imdamilan.spigotadditions.commands.parameter.CommandArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -10,9 +11,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 
 public class CommandBuilder {
 
@@ -23,7 +22,7 @@ public class CommandBuilder {
     private String[] aliases;
     private boolean playerOnly;
     private boolean consoleOnly;
-    private BiConsumer<CommandSender, List<CommandArgument>> executor;
+    private CommandExecutor executor;
     private String consoleOnlyMessage;
     private String playerOnlyMessage;
     private String noPermissionMessage;
@@ -62,7 +61,7 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder setExecutor(BiConsumer<CommandSender, List<CommandArgument>> executor) {
+    public CommandBuilder setExecutor(CommandExecutor executor) {
         this.executor = executor;
         return this;
     }
@@ -82,7 +81,7 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder executes(BiConsumer<CommandSender, List<CommandArgument>> executor) {
+    public CommandBuilder executes(CommandExecutor executor) {
         this.executor = executor;
         return this;
     }
@@ -111,8 +110,7 @@ public class CommandBuilder {
                     sender.sendMessage(onpm.orElse("You do not have permission to execute this command."));
                     return true;
                 }
-                executor.accept(sender, CommandArgument.adapt(args));
-                return true;
+                return executor.execute(sender, CommandArgument.adapt(args));
             }
         };
     }
