@@ -38,7 +38,12 @@ public class Listeners implements org.bukkit.event.Listener {
                                 HandlerList handlers = (HandlerList) method.getParameters()[0].getType().getDeclaredMethod("getHandlerList").invoke(null);
                                 handlers.register(rl);
                             } catch (Exception e) {
-                                SpigotAdditions.getInstance().getLogger().warning("The event " + method.getParameters()[0].getType().getSimpleName() + " does not have a getHandlerList() method!");
+                                try {
+                                    HandlerList handlers = (HandlerList) method.getParameters()[0].getType().getSuperclass().getDeclaredMethod("getHandlerList").invoke(null);
+                                    handlers.register(rl);
+                                } catch (Exception e1) {
+                                    SpigotAdditions.getInstance().getLogger().warning("The event " + method.getParameters()[0].getType().getSimpleName() + " does not have a getHandlerList() method!");
+                                }
                             }
                         }
                     }
