@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class CommandBuilder {
@@ -26,9 +28,14 @@ public class CommandBuilder {
     private String consoleOnlyMessage;
     private String playerOnlyMessage;
     private String noPermissionMessage;
+    private final HashMap<Integer, List<String>> tabComplete = new HashMap<>();
 
     public CommandBuilder(String label) {
         this.label = label;
+    }
+
+    public static CommandBuilder create(String label) {
+        return new CommandBuilder(label);
     }
 
     public CommandBuilder setAliases(String... aliases) {
@@ -81,6 +88,16 @@ public class CommandBuilder {
         return this;
     }
 
+    public CommandBuilder setTabCompletion(int index, List<String> tabComplete) {
+        this.tabComplete.put(index, tabComplete);
+        return this;
+    }
+
+    public CommandBuilder setTabCompletion(int index, String... tabComplete) {
+        this.tabComplete.put(index, Arrays.asList(tabComplete));
+        return this;
+    }
+
     public CommandBuilder executes(CommandExecutor executor) {
         this.executor = executor;
         return this;
@@ -111,6 +128,14 @@ public class CommandBuilder {
                     return true;
                 }
                 return executor.execute(sender, CommandArgument.adapt(args));
+            }
+
+            @Override
+            public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
+                if (tabComplete.containsKey(args.length - 1)) {
+                    return tabComplete.get(args.length - 1);
+                }
+                return super.tabComplete(sender, alias, args);
             }
         };
     }
