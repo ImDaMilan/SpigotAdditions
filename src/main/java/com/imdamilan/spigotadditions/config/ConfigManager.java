@@ -19,12 +19,12 @@ public class ConfigManager {
         saveToFile(plugin, clazz);
     }
 
-    public static <T> void getFromConfig(Plugin plugin, Class<T> clazz) {
-        getFromFile(plugin, clazz);
+    public static <T> ArrayList<T> getFromConfig(Plugin plugin, Class<T> clazz) {
+        return getFromFile(plugin, clazz);
     }
 
-    public static <T> void getFromConfig(Class<T> clazz, Plugin plugin) {
-        getFromFile(plugin, clazz);
+    public static <T> ArrayList<T> getFromConfig(Class<T> clazz, Plugin plugin) {
+        return getFromFile(plugin, clazz);
     }
 
     /**
