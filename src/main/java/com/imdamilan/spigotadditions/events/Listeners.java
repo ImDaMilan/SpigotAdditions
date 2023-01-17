@@ -1,13 +1,11 @@
 package com.imdamilan.spigotadditions.events;
 
 import com.google.common.reflect.ClassPath;
-import com.imdamilan.spigotadditions.SpigotAdditions;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredListener;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 public class Listeners implements org.bukkit.event.Listener {
@@ -30,10 +28,11 @@ public class Listeners implements org.bukkit.event.Listener {
                             RegisteredListener rl = new RegisteredListener(this, (listener, event) -> {
                                 try {
                                     method.invoke(null, event);
-                                } catch (IllegalAccessException | InvocationTargetException e) {
+                                } catch (IllegalArgumentException ignored) {
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                            }, annotation.priority(), SpigotAdditions.getInstance(), annotation.ignoreCancelled());
+                            }, annotation.priority(), plugin, annotation.ignoreCancelled());
                             try {
                                 HandlerList handlers = (HandlerList) method.getParameters()[0].getType().getDeclaredMethod("getHandlerList").invoke(null);
                                 handlers.register(rl);
@@ -42,7 +41,7 @@ public class Listeners implements org.bukkit.event.Listener {
                                     HandlerList handlers = (HandlerList) method.getParameters()[0].getType().getSuperclass().getDeclaredMethod("getHandlerList").invoke(null);
                                     handlers.register(rl);
                                 } catch (Exception e1) {
-                                    SpigotAdditions.getInstance().getLogger().warning("The event " + method.getParameters()[0].getType().getSimpleName() + " does not have a getHandlerList() method!");
+                                    plugin.getLogger().warning("The event " + method.getParameters()[0].getType().getSimpleName() + " does not have a getHandlerList() method!");
                                 }
                             }
                         }
