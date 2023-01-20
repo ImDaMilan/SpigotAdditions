@@ -27,7 +27,7 @@ public class SQLConnection {
         String URL = "jdbc:mysql://" + host + ":" + port + "/" + database;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(URL);
+            connection = DriverManager.getConnection(URL, username, password);
         } catch (Exception e) {
             e.printStackTrace();
         }
