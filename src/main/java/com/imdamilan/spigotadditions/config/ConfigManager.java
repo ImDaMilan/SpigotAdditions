@@ -143,6 +143,8 @@ public class ConfigManager {
                             } catch (IllegalAccessException e) {
                                 e.printStackTrace();
                             }
+                        } else if (field.isAnnotationPresent(ObjectKey.class)) {
+                            field.set(object, key);
                         }
                     }
                     objects.add(object);

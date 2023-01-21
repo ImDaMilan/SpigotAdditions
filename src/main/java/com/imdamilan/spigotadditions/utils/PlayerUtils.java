@@ -8,14 +8,13 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class PlayerUtils {
 
@@ -169,6 +168,48 @@ public class PlayerUtils {
 
     public static UUID getOfflinePlayerUUID(String name) {
         return UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes());
+    }
+
+    public static void sendBossBar(Player player, BossBar bossBar) {
+        bossBar.addPlayer(player);
+    }
+
+    public static void sendBossBar(Player player, BossBar bossBar, int duration) {
+        bossBar.addPlayer(player);
+        Bukkit.getScheduler().runTaskLater(SpigotAdditions.getInstance(), () -> bossBar.removePlayer(player), duration);
+    }
+
+    public static void sendBossBarGlobal(BossBar bossBar) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            bossBar.addPlayer(player);
+        }
+    }
+
+    public static void sendBossBarGlobal(BossBar bossBar, int duration) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            bossBar.addPlayer(player);
+        }
+        Bukkit.getScheduler().runTaskLater(SpigotAdditions.getInstance(), bossBar::removeAll, duration);
+    }
+
+    public static void sendBossBarGlobal(BossBar bossBar, Player... players) {
+        for (Player player : players) {
+            bossBar.addPlayer(player);
+        }
+    }
+
+    public static void sendBossBarGlobal(BossBar bossBar, Collection<Player> players) {
+        for (Player player : players) {
+            bossBar.addPlayer(player);
+        }
+    }
+
+    public static void sendBossBarGlobal(BossBar bossBar, Predicate<Player> predicate) {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (predicate.test(player)) {
+                bossBar.addPlayer(player);
+            }
+        }
     }
 
     public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
