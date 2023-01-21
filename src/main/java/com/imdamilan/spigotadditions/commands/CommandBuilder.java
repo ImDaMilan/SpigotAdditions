@@ -1,6 +1,7 @@
 package com.imdamilan.spigotadditions.commands;
 
 import com.imdamilan.spigotadditions.commands.function.CommandExecutor;
+import com.imdamilan.spigotadditions.commands.function.TabCompleteExecutor;
 import com.imdamilan.spigotadditions.commands.parameter.CommandArgument;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
@@ -11,7 +12,6 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public class CommandBuilder {
     private String consoleOnlyMessage;
     private String playerOnlyMessage;
     private String noPermissionMessage;
-    private final HashMap<Integer, List<String>> tabComplete = new HashMap<>();
+    private TabCompleteExecutor tabComplete;
 
     public CommandBuilder(String label) {
         this.label = label;
@@ -88,13 +88,8 @@ public class CommandBuilder {
         return this;
     }
 
-    public CommandBuilder setTabCompletion(int index, List<String> tabComplete) {
-        this.tabComplete.put(index, tabComplete);
-        return this;
-    }
-
-    public CommandBuilder setTabCompletion(int index, String... tabComplete) {
-        this.tabComplete.put(index, Arrays.asList(tabComplete));
+    public CommandBuilder setTabCompletion(TabCompleteExecutor tabComplete) {
+        this.tabComplete = tabComplete;
         return this;
     }
 
@@ -132,10 +127,11 @@ public class CommandBuilder {
 
             @Override
             public List<String> tabComplete(CommandSender sender, String alias, String[] args) throws IllegalArgumentException {
-                if (tabComplete.containsKey(args.length - 1)) {
-                    return tabComplete.get(args.length - 1);
+                if (tabComplete == null) {
+                    return super.tabComplete(sender, alias, args);
+                } else {
+                    return tabComplete.execute(sender, CommandArgument.adapt(args));
                 }
-                return super.tabComplete(sender, alias, args);
             }
         };
     }
