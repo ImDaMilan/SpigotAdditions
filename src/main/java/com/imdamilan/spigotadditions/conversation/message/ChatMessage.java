@@ -45,12 +45,15 @@ public @Data class ChatMessage implements Listener {
         this.color = color;
     }
 
+    public TextComponent getComponent() {
+        return Component.text(message).clickEvent(ClickEvent.runCommand("/" + command)).color(color);
+    }
+
     public void send(Player player, BukkitAudiences adventure) {
         if (event == null) {
             player.sendMessage(message);
         } else {
-            TextComponent component = Component.text(message).clickEvent(ClickEvent.runCommand("/" + command)).color(color);
-            adventure.player(player).sendMessage(component);
+            adventure.player(player).sendMessage(getComponent());
         }
     }
 
