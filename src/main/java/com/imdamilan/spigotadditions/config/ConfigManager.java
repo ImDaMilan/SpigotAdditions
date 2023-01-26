@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -39,39 +40,44 @@ public class ConfigManager {
             String name = dataFile.value();
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
-            try {
-                ArrayList<T> objects = (ArrayList<T>) clazz.getDeclaredMethod("getObjects").invoke(null);
-                for (Object object : objects) {
-                    String key = "";
-                    for (Field field : clazz.getDeclaredFields()) {
-                        field.setAccessible(true);
-                        if (field.isAnnotationPresent(ObjectKey.class)) key = (String) field.get(object);
-                    }
-                    for (Field field : clazz.getDeclaredFields()) {
-                        field.setAccessible(true);
-                        if (field.isAnnotationPresent(Path.class)) {
-                            Path path = field.getAnnotation(Path.class);
-                            String name1 = path.value();
-                            if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
-                            try {
-                                if (!field.getType().isEnum()) {
-                                    configuration.set(key + "." + name1, field.get(object));
-                                } else {
-                                    configuration.set(key + "." + name1, field.get(object).toString());
-                                }
-                                configuration.save(file);
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
-                            }
+            if (!dataFile.separateFiles()) {
+                try {
+                    ArrayList<T> objects = (ArrayList<T>) clazz.getDeclaredMethod("getObjects").invoke(null);
+                    for (Object object : objects) {
+                        String key = "";
+                        for (Field field : clazz.getDeclaredFields()) {
+                            field.setAccessible(true);
+                            if (field.isAnnotationPresent(ObjectKey.class)) key = (String) field.get(object);
                         }
+                        setValues(clazz, file, configuration, object, key);
                     }
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a static getObjects() method that returns an ArrayList of objects!");
+                } catch (ClassCastException e ) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " doesn't have a valid @ObjectKey string field!");
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-            } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
-                throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a static getObjects() method that returns an ArrayList of objects!");
-            } catch (ClassCastException e ) {
-                throw new RuntimeException("The class " + clazz.getSimpleName() + " doesn't have a valid @ObjectKey string field!");
-            } catch (Exception e) {
-                e.printStackTrace();
+            } else {
+                try {
+                    ArrayList<T> objects = (ArrayList<T>) clazz.getDeclaredMethod("getObjects").invoke(null);
+                    for (Object object : objects) {
+                        String key = "";
+                        for (Field field : clazz.getDeclaredFields()) {
+                            field.setAccessible(true);
+                            if (field.isAnnotationPresent(ObjectKey.class)) key = (String) field.get(object);
+                        }
+                        File objectFile = new File(plugin.getDataFolder() + File.separator + dataFile.value() + File.separator + key + ".yml");
+                        configuration = YamlConfiguration.loadConfiguration(objectFile);
+                        setValues(clazz, file, configuration, object);
+                    }
+                } catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException e) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a static getObjects() method that returns an ArrayList of objects!");
+                } catch (ClassCastException e ) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " doesn't have a valid @ObjectKey string field!");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } else if (clazz.isAnnotationPresent(Config.class)) {
             Config config = clazz.getAnnotation(Config.class);
@@ -101,6 +107,48 @@ public class ConfigManager {
         }
     }
 
+    private static <T> void setValues(Class<T> clazz, File file, FileConfiguration configuration, Object object, String key) throws IOException {
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.isAnnotationPresent(Path.class)) {
+                Path path = field.getAnnotation(Path.class);
+                String name1 = path.value();
+                if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                try {
+                    if (!field.getType().isEnum()) {
+                        configuration.set(key + "." + name1, field.get(object));
+                    } else {
+                        configuration.set(key + "." + name1, field.get(object).toString());
+                    }
+                    configuration.save(file);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private static <T> void setValues(Class<T> clazz, File file, FileConfiguration configuration, Object object) throws IOException {
+        for (Field field : clazz.getDeclaredFields()) {
+            field.setAccessible(true);
+            if (field.isAnnotationPresent(Path.class)) {
+                Path path = field.getAnnotation(Path.class);
+                String name1 = path.value();
+                if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                try {
+                    if (!field.getType().isEnum()) {
+                        configuration.set(name1, field.get(object));
+                    } else {
+                        configuration.set(name1, field.get(object).toString());
+                    }
+                    configuration.save(file);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     /**
      * Loads all the fields annotated with {@link Path} in the specified class with the {@link Config} or {@link DataFile} annotation from the specified file.
      * @param clazz The class with the annotated fields.
@@ -125,32 +173,75 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ArrayList<T> objects = new ArrayList<>();
-            try {
-                for (String key : configuration.getKeys(false)) {
-                    T object = clazz.getDeclaredConstructor().newInstance();
-                    for (Field field : clazz.getDeclaredFields()) {
-                        field.setAccessible(true);
-                        if (field.isAnnotationPresent(Path.class)) {
-                            Path path = field.getAnnotation(Path.class);
-                            String name1 = path.value();
-                            if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
-                            try {
-                                if (!field.getType().isEnum()) {
-                                    field.set(object, configuration.get(key + "." + name1));
-                                } else {
-                                    field.set(object, Enum.valueOf((Class<Enum>) field.getType(), configuration.getString(key + "." + name1)));
+            if (dataFile.separateFiles()) {
+                try {
+                    for (String key : configuration.getKeys(false)) {
+                        T object = clazz.getDeclaredConstructor().newInstance();
+                        for (Field field : clazz.getDeclaredFields()) {
+                            field.setAccessible(true);
+                            if (field.isAnnotationPresent(Path.class)) {
+                                Path path = field.getAnnotation(Path.class);
+                                String name1 = path.value();
+                                if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                                try {
+                                    if (!field.getType().isEnum()) {
+                                        field.set(object, configuration.get(key + "." + name1));
+                                    } else {
+                                        field.set(object, Enum.valueOf((Class<Enum>) field.getType(), configuration.getString(key + "." + name1)));
+                                    }
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (IllegalAccessException e) {
-                                e.printStackTrace();
+                            } else if (field.isAnnotationPresent(ObjectKey.class)) {
+                                field.set(object, key);
                             }
-                        } else if (field.isAnnotationPresent(ObjectKey.class)) {
-                            field.set(object, key);
+                        }
+                        objects.add(object);
+                    }
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a default no-args constructor!");
+                }
+            } else {
+                try {
+                    File file1 = new File(plugin.getDataFolder(), dataFile.value());
+                    if (!file1.exists()) {
+                        file1.createNewFile();
+                    }
+                    File[] files = file1.listFiles();
+                    if (files == null) {
+                        throw new RuntimeException("The directory " + file1.getAbsolutePath() + " does not exist!");
+                    }
+                    for (File file2 : files) {
+                        if (file2.getName().endsWith(".yml")) {
+                            FileConfiguration configuration1 = YamlConfiguration.loadConfiguration(file2);
+                            T object = clazz.getDeclaredConstructor().newInstance();
+                            for (Field field : clazz.getDeclaredFields()) {
+                                field.setAccessible(true);
+                                if (field.isAnnotationPresent(Path.class)) {
+                                    Path path = field.getAnnotation(Path.class);
+                                    String name1 = path.value();
+                                    if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                                    try {
+                                        if (!field.getType().isEnum()) {
+                                            field.set(object, configuration1.get(name1));
+                                        } else {
+                                            field.set(object, Enum.valueOf((Class<Enum>) field.getType(), configuration1.getString(name1)));
+                                        }
+                                    } catch (IllegalAccessException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else if (field.isAnnotationPresent(ObjectKey.class)) {
+                                    field.set(object, file2.getName().replace(".yml", ""));
+                                }
+                            }
+                            objects.add(object);
                         }
                     }
-                    objects.add(object);
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a default no-args constructor!");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a default no-args constructor!");
             }
             return objects;
         } else if (clazz.isAnnotationPresent(Config.class)) {

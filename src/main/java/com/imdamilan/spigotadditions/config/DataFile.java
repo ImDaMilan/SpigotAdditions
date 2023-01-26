@@ -15,4 +15,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DataFile {
     String value() default "config.yml";
+    boolean separateFiles() default false;
 }
