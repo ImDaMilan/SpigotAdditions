@@ -212,6 +212,16 @@ public class PlayerUtils {
         }
     }
 
+    public static void blockMovement(Player player) {
+        player.setWalkSpeed(0);
+        player.setFlySpeed(0);
+    }
+
+    public static void unblockMovement(Player player) {
+        player.setWalkSpeed(0.2f);
+        player.setFlySpeed(0.1f);
+    }
+
     public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (vanishedPlayers.contains(player)) {
