@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.plugin.Plugin;
 
+import java.util.HashMap;
 import java.util.function.Consumer;
 
 /**
@@ -17,8 +18,7 @@ import java.util.function.Consumer;
  */
 public class PlayerEventFlowCallback<T extends PlayerEvent, K extends PlayerEvent> implements Listener {
 
-    private Player player;
-    private boolean done;
+    private final HashMap<Player, Boolean> map = new HashMap<>();
     private Consumer<T> firstEvent;
     private Consumer<K> secondEvent;
 
@@ -54,14 +54,15 @@ public class PlayerEventFlowCallback<T extends PlayerEvent, K extends PlayerEven
     public void onEvent(T event) {
         firstEvent.accept(event);
         Player player = event.getPlayer();
-        this.done = true;
+        map.put(player, true);
     }
 
     @EventHandler
     public void onSecondEvent(K event) {
-        if (done) {
-            if (event.getPlayer().getUniqueId().equals(player.getUniqueId())) {
+        if (map.getOrDefault(event.getPlayer(), false)) {
+            if (map.containsKey(event.getPlayer())) {
                 secondEvent.accept(event);
+                map.remove(event.getPlayer());
             }
         }
     }
