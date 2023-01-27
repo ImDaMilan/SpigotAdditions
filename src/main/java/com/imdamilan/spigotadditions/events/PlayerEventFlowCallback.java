@@ -10,6 +10,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.function.Consumer;
 
+/**
+ * A class that allows you to listen for two events in a row, does a certain player handle, than will call a callback once the second event is called for the same player.
+ * @param <T> The first event class, must extend PlayerEvent.
+ * @param <K> The second event class, must extend PlayerEvent.
+ */
 public class PlayerEventFlowCallback<T extends PlayerEvent, K extends PlayerEvent> implements Listener {
 
     private Player player;
@@ -25,11 +30,21 @@ public class PlayerEventFlowCallback<T extends PlayerEvent, K extends PlayerEven
         Bukkit.getPluginManager().registerEvents(this, SpigotAdditions.getInstance());
     }
 
+    /**
+     * Sets the listener for the first event.
+     * @param event The consumer to be called when the first event is called.
+     * @return This PlayerEventFlowCallback instance.
+     */
     public PlayerEventFlowCallback<T, K> listen(Consumer<T> event) {
         this.firstEvent = event;
         return this;
     }
 
+    /**
+     * Executes the callback when the second event is called for the same player as the first event.
+     * @param event The consumer to be called when the second event is called.
+     * @return This PlayerEventFlowCallback instance.
+     */
     public PlayerEventFlowCallback<T, K> then(Consumer<K> event) {
         this.secondEvent = event;
         return this;

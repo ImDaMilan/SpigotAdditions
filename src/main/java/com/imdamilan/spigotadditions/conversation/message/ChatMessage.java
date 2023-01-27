@@ -17,6 +17,9 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+/**
+ * A Kyori Adventure based chat message, with a configurable custom click event callback.
+ */
 public @Data class ChatMessage implements Listener {
 
     private String message;
@@ -29,6 +32,10 @@ public @Data class ChatMessage implements Listener {
         Bukkit.getPluginManager().registerEvents(this, SpigotAdditions.getInstance());
     }
 
+    /**
+     * Set the click event callback.
+     * @param event The consumer to be called when the message is clicked, with the player as the argument.
+     */
     public void onClick(Consumer<Player> event) {
         this.event = event;
     }
@@ -45,10 +52,19 @@ public @Data class ChatMessage implements Listener {
         this.color = color;
     }
 
+    /**
+     * Returns the TextComponent of the message.
+     * @return The Kyori Adventure TextComponent of the message.
+     */
     public TextComponent getComponent() {
         return Component.text(message).clickEvent(ClickEvent.runCommand("/" + command)).color(color);
     }
 
+    /**
+     * Sends the message to the player.
+     * @param player The player to send the message to.
+     * @param adventure The BukkitAudiences instance to use.
+     */
     public void send(Player player, BukkitAudiences adventure) {
         if (event == null) {
             player.sendMessage(message);
@@ -57,6 +73,10 @@ public @Data class ChatMessage implements Listener {
         }
     }
 
+    /**
+     * Sends the message to the player. Uses the default BukkitAudiences instance.
+     * @param player The player to send the message to.
+     */
     public void send(Player player) {
         send(player, SpigotAdditions.getAdventure());
     }

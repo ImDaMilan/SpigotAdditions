@@ -15,6 +15,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Builder class for creating commands without the usage of a plugin.yml file, main class and a CommandExecutor/TabCompleter.
+ */
 public class CommandBuilder {
 
     private final String label;
@@ -98,6 +101,11 @@ public class CommandBuilder {
         return this;
     }
 
+    /**
+     * Builds the BukkitCommand defined by the builder. The method will not register the command, to do so use {@link #buildAndRegister()}.
+     * @return The BukkitCommand with the values defined by the builder or default values.
+     * @throws IllegalStateException If the executor is null.
+     */
     public BukkitCommand build() {
         if (executor == null) {
             throw new IllegalStateException("Executor cannot be null");
@@ -136,6 +144,11 @@ public class CommandBuilder {
         };
     }
 
+    /**
+     * Builds the BukkitCommand defined by the builder and registers it to the server.
+     * @return The BukkitCommand with the values defined by the builder or default values.
+     * @throws IllegalStateException If the executor is null.
+     */
     public BukkitCommand buildAndRegister() {
         BukkitCommand command = build();
         registerCommand(command);
