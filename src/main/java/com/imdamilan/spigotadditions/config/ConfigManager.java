@@ -173,7 +173,7 @@ public class ConfigManager {
             File file = new File(plugin.getDataFolder(), name);
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(file);
             ArrayList<T> objects = new ArrayList<>();
-            if (dataFile.separateFiles()) {
+            if (!dataFile.separateFiles()) {
                 try {
                     for (String key : configuration.getKeys(false)) {
                         T object = clazz.getDeclaredConstructor().newInstance();
