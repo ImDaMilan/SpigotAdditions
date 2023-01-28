@@ -18,25 +18,25 @@ No need to register the listener or put it in a class that implements Listener, 
 ###  2. Quick and boilerplate-free Command API with TabComplete support!
 ```java
 public class TestCommand {  
-	public static void createCommand() {
-		CommandBuilder.create("test")
-				.setAliases("t", "test")
-				.setDescription("testCommand")
-				.setPermission("spigotadditions.test")
-				.setPlayerOnly(true)
-				.setUsage("/test")
-				.setTabCompletion((sender, args) -> {
-					//add tab completion logic here
-				})
-				.executes((sender, args) -> {
-					//add command logic here
-					//args parameter is a custom CommandArguments class
-					//CommandArguments allow you to automatically cast an arg to what you need
-					//for example:
-					if (args.get(0).isPlayer()) Player player = args.get(0).toPlayer();
-					//and so on, there are many things to reduce boilerplate and increase productivity
-				})
-				.buildAndRegister();
+    public static void createCommand() {
+	CommandBuilder.create("test")
+		.setAliases("t", "test")
+		.setDescription("testCommand")
+		.setPermission("spigotadditions.test")
+		.setPlayerOnly(true)
+		.setUsage("/test")
+		.setTabCompletion((sender, args) -> {
+			//add tab completion logic here
+		})
+		.executes((sender, args) -> {
+			//add command logic here
+			//args parameter is a custom CommandArguments class
+			//CommandArguments allow you to automatically cast an arg to what you need
+			//for example:
+			if (args.get(0).isPlayer()) Player player = args.get(0).toPlayer();
+			//and so on, there are many things to reduce boilerplate and increase productivity
+		})
+		.buildAndRegister();
 }
 ```
 Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the builder manages itself, there are also more methods in the builder that you can check out!
@@ -274,6 +274,26 @@ ThirdPlayer:
 In the example above, we have 3 objects, where the object keys / names of the players are ImDaMilan, Player2 and ThirdPlayer, the `level` variables are 100, 50 and 50, and so on.
 
 Since 1.2, you can also add the 'separateFiles' boolean value to the DataFile annotation, in which case objects will have their separate files in a specified folder!
+
+### 14. ChatMessage API
+Kyori Adventure-based simple chat message API for sending easy colored messages with custom click actions, introduced in 1.2!
+```java
+ChatMessage message = new ChatMessage("Hello world!");
+message.onClick(player -> player.sendMessage("hey!"));
+message.setColor(NamedTextColor.RED);
+message.send(player);
+```
+### 15. Player Event Flow API
+Another awesome feature introduced in 1.2, this API allows you to listen to one event of a player, and than wait for that same player to trigger another event that you need!
+```java
+new PlayerEventFlowCallback<PlayerInteractEvent, AsyncPlayerChatEvent>().listen(event -> {
+    event.getPlayer().sendMessage("send a message to be able to walk again");
+    PlayerUtils.blockMovement(event.getPlayer());
+}).then(event -> {
+    event.getPlayer().sendMessage("here you go");
+    PlayerUtils.unblockMovement(event.getPlayer());
+});
+```
 
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
