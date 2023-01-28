@@ -39,7 +39,7 @@ public class TestCommand {
 		.buildAndRegister();
 }
 ```
-Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the builder manages itself, there are also more methods in the builder that you can check out!
+Again, no need to put it in the plugin.yml the builder manages itself, there are also more methods in the builder that you can check out! All you have to do is implement your logic, and than just make sure that the method where you put the command registration is called upon startup!
 
 ###  3. A Custom Enchantment API!
 ```java
