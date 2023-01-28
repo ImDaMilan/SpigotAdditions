@@ -13,7 +13,7 @@ public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
     event.getPlayer().sendMessage("Hello!");  
 }
 ```
-No need to register the listener or put it in a class that implements Listener, you can put the annotation above any static method that's parameter is an event, and SpigotAdditions will automatically do everything else for you!
+No need to register the listener or put it in a class that implements Listener, you can put the annotation above any static method that's parameter is an event, and SpigotAdditions will automatically do everything else for you! This has existed since the very first release, but due to the various improvements and bugfixes, it is recommended to use versions above 1.2!
 
 ###  2. Quick and boilerplate-free Command API with TabComplete support!
 ```java
