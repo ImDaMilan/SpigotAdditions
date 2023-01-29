@@ -12,6 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 public class ItemStackBuilder extends ItemStack {
 
@@ -104,6 +105,43 @@ public class ItemStackBuilder extends ItemStack {
         }
         setItemMeta(meta);
         return this;
+    }
+
+    /**
+     * Sets the lore of the ItemStack.
+     * @param lore The new lore of the ItemStack.
+     */
+    public ItemStackBuilder lore(List<String> lore) {
+        ItemMeta meta = this.hasItemMeta() ? this.getItemMeta() : Bukkit.getItemFactory().getItemMeta(this.getType());
+        assert meta != null;
+        meta.setLore(lore);
+        setItemMeta(meta);
+        return this;
+    }
+
+    /**
+     * Adds a new lore line to the ItemStack.
+     * @param lore The new lore line of the ItemStack.
+     */
+    public ItemStackBuilder description(String... lore) {
+        return addLore(lore);
+    }
+
+    /**
+     * Sets the lore line at the given index of the ItemStack.
+     * @param index The index of the lore line.
+     * @param lore The new lore line of the ItemStack.
+     */
+    public ItemStackBuilder description(int index, String lore) {
+        return lore(index, lore);
+    }
+
+    /**
+     * Sets the lore of the ItemStack.
+     * @param lore The new lore of the ItemStack.
+     */
+    public ItemStackBuilder description(List<String> lore) {
+        return lore(lore);
     }
 
     /**

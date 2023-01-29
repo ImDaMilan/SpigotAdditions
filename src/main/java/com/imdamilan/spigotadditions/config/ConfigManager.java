@@ -91,6 +91,11 @@ public class ConfigManager {
                     String name1 = path.value();
                     if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                     try {
+                        if (field.get(null) == null && path.required()) {
+                            throw new RuntimeException("The field " + field.getName() + " in the class " + clazz.getSimpleName() + " is required but is null!");
+                        } else if (field.get(null) == null) {
+                            continue;
+                        }
                         if (!field.getType().isEnum()) {
                             configuration.set(name1, field.get(null));
                         } else {
@@ -115,6 +120,11 @@ public class ConfigManager {
                 String name1 = path.value();
                 if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                 try {
+                    if (field.get(object) == null && path.required()) {
+                        throw new RuntimeException("The field " + field.getName() + " in the class " + clazz.getSimpleName() + " is required but is null!");
+                    } else if (field.get(object) == null) {
+                        continue;
+                    }
                     if (!field.getType().isEnum()) {
                         configuration.set(key + "." + name1, field.get(object));
                     } else {
@@ -136,6 +146,11 @@ public class ConfigManager {
                 String name1 = path.value();
                 if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
                 try {
+                    if (field.get(object) == null && path.required()) {
+                        throw new RuntimeException("The field " + field.getName() + " in the class " + clazz.getSimpleName() + " is required but is null!");
+                    } else if (field.get(object) == null) {
+                        continue;
+                    }
                     if (!field.getType().isEnum()) {
                         configuration.set(name1, field.get(object));
                     } else {
@@ -183,6 +198,12 @@ public class ConfigManager {
                                 Path path = field.getAnnotation(Path.class);
                                 String name1 = path.value();
                                 if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                                boolean required = path.required();
+                                if (required && !configuration.contains(key + "." + name1)) {
+                                    throw new RuntimeException("The path " + key + "." + name1 + " is required but not found in the file " + name + "!");
+                                } else if (!configuration.contains(key + "." + name1)) {
+                                    continue;
+                                }
                                 try {
                                     if (!field.getType().isEnum()) {
                                         field.set(object, configuration.get(key + "." + name1));
@@ -221,6 +242,12 @@ public class ConfigManager {
                                     Path path = field.getAnnotation(Path.class);
                                     String name1 = path.value();
                                     if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                                    boolean required = path.required();
+                                    if (required && !configuration1.contains(name1)) {
+                                        throw new RuntimeException("The path " + name1 + " is required but not found in the file " + file2.getName() + "!");
+                                    } else if (!configuration1.contains(name1)) {
+                                        continue;
+                                    }
                                     try {
                                         if (!field.getType().isEnum()) {
                                             field.set(object, configuration1.get(name1));
@@ -285,6 +312,12 @@ public class ConfigManager {
                 Path path = field.getAnnotation(Path.class);
                 String name1 = path.value();
                 if (name1.isBlank() || name1.isEmpty()) name1 = field.getName();
+                boolean required = path.required();
+                if (required && !configuration.contains(name1)) {
+                    throw new RuntimeException("The path " + name1 + " is required but not found in the file " + file.getName() + "!");
+                } else if (!configuration.contains(name1)) {
+                    continue;
+                }
                 try {
                     if (!field.getType().isEnum()) {
                         field.set(null, configuration.get(name1));
