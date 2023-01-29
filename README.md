@@ -13,27 +13,33 @@ public static @Listener void onPlayerJoin(PlayerJoinEvent event) {
     event.getPlayer().sendMessage("Hello!");  
 }
 ```
-No need to register the listener or put it in a class that implements Listener, you can put the annotation above any static method that's parameter is an event, and SpigotAdditions will automatically do everything else for you!
+No need to register the listener or put it in a class that implements Listener, you can put the annotation above any static method that's parameter is an event, and SpigotAdditions will automatically do everything else for you! This has existed since the very first release, but due to the various improvements and bugfixes, it is recommended to use versions above 1.2!
 
-###  2. An @Command annotation that automatically registers itself,  the executor, and all the basic stuff you might need from it!
+###  2. Quick and boilerplate-free Command API with TabComplete support!
 ```java
-@Command(
- name = "test",   
- permission = "test.test",   
- usage = "/test",  
- description = "Testing command",  
- aliases = {"t", "testcommand"},  
- minArgs = 1,   
- playerOnly = false,  
- consoleOnly = false)  
-)  
 public class TestCommand {  
-  public static boolean execute(CommandSender sender, Command command, String label, String[] args) {  
-	  sender.sendMessage("Test command executed!");
-	  return true;
- }}
+    public static void createCommand() {
+	CommandBuilder.create("test")
+		.setAliases("t", "test")
+		.setDescription("testCommand")
+		.setPermission("spigotadditions.test")
+		.setPlayerOnly(true)
+		.setUsage("/test")
+		.setTabCompletion((sender, args) -> {
+			//add tab completion logic here
+		})
+		.executes((sender, args) -> {
+			//add command logic here
+			//args parameter is a custom CommandArguments class
+			//CommandArguments allow you to automatically cast an arg to what you need
+			//for example:
+			if (args.get(0).isPlayer()) Player player = args.get(0).toPlayer();
+			//and so on, there are many things to reduce boilerplate and increase productivity
+		})
+		.buildAndRegister();
+}
 ```
-Again, no need to put it in the plugin.yml or to do anything in the main class of the plugin, the annotation manages itself, there are also more parameters in the annotation that you can check out!
+Again, no need to put it in the plugin.yml the builder manages itself, there are also more methods in the builder that you can check out! All you have to do is implement your logic, and than just make sure that the method where you put the command registration is called upon startup!
 
 ###  3. A Custom Enchantment API!
 ```java
@@ -85,6 +91,8 @@ gui.getPages().forEach(page -> {
 }
 ```
 Introduced in version 0.2, PaginatedGUIs can also be created, and they are as simple to create and use as one can imagine, 0.2 also introduced SetPageButtons, that are GUIButtons that willl automatically do all the PaginatedGUI page setting for you!
+
+Since 1.2, there is also MenuGUI, similar to InventoryGUI, but it allows creation of GUIs that aren't chest inventories, but of any type.
 
 ### 6. Custom Item API and Player Head API!
 ```java
@@ -165,6 +173,7 @@ PlayerUtils.setMaxHealth(player, 30);
 Block blockBelow = PlayerUtils.getBlockBelow(player);
 PlayerUtils.sendPacket(player, PACKET);
 UUID uuid = PlayerUtils.getOfflinePlayerUUID(playerName);
+PlayerUtils.blockMovement(player);
 ```
 And many more player util methods! The `showPlayer()` and `hidePlayer()` methods are even tied to a Listener, so that joining and leaving players won't bug out and see or unneedingly not see the player!
 ```java
@@ -264,6 +273,28 @@ ThirdPlayer:
 ```
 In the example above, we have 3 objects, where the object keys / names of the players are ImDaMilan, Player2 and ThirdPlayer, the `level` variables are 100, 50 and 50, and so on.
 
+Since 1.2, you can also add the 'separateFiles' boolean value to the DataFile annotation, in which case objects will have their separate files in a specified folder!
+
+### 14. ChatMessage API
+Kyori Adventure-based simple chat message API for sending easy colored messages with custom click actions, introduced in 1.2!
+```java
+ChatMessage message = new ChatMessage("Hello world!");
+message.onClick(player -> player.sendMessage("hey!"));
+message.setColor(NamedTextColor.RED);
+message.send(player);
+```
+### 15. Player Event Flow API
+Another awesome feature introduced in 1.2, this API allows you to listen to one event of a player, and than wait for that same player to trigger another event that you need!
+```java
+new PlayerEventFlowCallback<PlayerInteractEvent, AsyncPlayerChatEvent>().listen(event -> {
+    event.getPlayer().sendMessage("send a message to be able to walk again");
+    PlayerUtils.blockMovement(event.getPlayer());
+}).then(event -> {
+    event.getPlayer().sendMessage("here you go");
+    PlayerUtils.unblockMovement(event.getPlayer());
+});
+```
+
 ## Using SpigotAdditions in your own plugin!
 To use SpigotAdditions, you can use it as a dependency (or softdepend) in your plugin:
 ```yml
@@ -281,7 +312,7 @@ For the latest stable release use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.2-RC1</version>
+	<version>1.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -296,7 +327,7 @@ For the latest development build use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.2-RC1</version>
+	<version>1.2</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -310,7 +341,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.2-RC1'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.2'
 }
 ```
 For the latest development build use:
@@ -321,7 +352,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.2-RC1'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.2'
 }
 ```
 Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
