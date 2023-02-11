@@ -2,10 +2,13 @@ package com.imdamilan.spigotadditions.utils;
 
 import com.imdamilan.spigotadditions.SpigotAdditions;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BukkitUtils {
 
@@ -235,7 +238,30 @@ public class BukkitUtils {
      * @return The string with color codes.
      */
     public static String getColorCoded(String string, char colorCode) {
-        return string.replace(colorCode, '§');
+        return ChatColor.translateAlternateColorCodes(colorCode, string);
+    }
+
+    /**
+     * Returns the string with the hex color codes replaced with the desired color.
+     * The hex color codes must be in the format of &#RRGGBB.
+     * @param message The string to replace.
+     * @return The string with hex color codes replaced.
+     */
+    public static String applyHex(String message) {
+        Pattern pattern = Pattern.compile("&#[a-fA-F0-9]{6}");
+        Matcher matcher = pattern.matcher(message);
+        while (matcher.find()) {
+            String hexCode = message.substring(matcher.start(), matcher.end());
+            String replaceSharp = hexCode.replace('#', 'x').replace("&", "");
+            char[] ch = replaceSharp.toCharArray();
+            StringBuilder builder = new StringBuilder();
+            for (char c : ch) {
+                builder.append("&").append(c);
+            }
+            message = message.replace(hexCode, builder.toString());
+            matcher = pattern.matcher(message);
+        }
+        return ChatColor.translateAlternateColorCodes('&', message);
     }
 
     /**
