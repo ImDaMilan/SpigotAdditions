@@ -327,7 +327,7 @@ For the latest development build use:
 <dependency>
 	<groupId>com.github.ImDaMilan</groupId>
 	<artifactId>SpigotAdditions</artifactId>
-	<version>1.2.2</version>
+	<version>1.3-beta.1</version>
 	<scope>provided</scope>
 </dependency>
 ```
@@ -352,7 +352,7 @@ repositories {
 ```
 ```groovy
 dependencies {
-	implementation 'com.github.ImDaMilan:SpigotAdditions:1.2.2'
+	implementation 'com.github.ImDaMilan:SpigotAdditions:1.3-beta.1'
 }
 ```
 Keep in mind that development builds are not production-ready and should not be used outside of testing environments until the official release for those features appear!
