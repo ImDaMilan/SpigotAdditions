@@ -16,4 +16,5 @@ import java.lang.annotation.Target;
 public @interface DataFile {
     String value() default "config.yml";
     boolean separateFiles() default false;
+    Class<?>[] inheritFrom() default {};
 }

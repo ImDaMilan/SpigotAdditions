@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
+@SuppressWarnings("ALL")
 public class ConfigManager {
 
     public static <T> void saveToConfig(Plugin plugin, Class<T> clazz) {
@@ -301,6 +304,26 @@ public class ConfigManager {
      */
     public static <T> void saveToFile(Plugin plugin, Collection<T> objects) {
         Class<?> clazz = objects.iterator().next().getClass();
+        List<Field> fields = new ArrayList<>(Arrays.asList(clazz.getDeclaredFields()));
+        if (clazz.isAnnotationPresent(DataFile.class)) {
+            DataFile dataFile = clazz.getAnnotation(DataFile.class);
+            for (Class<?> inherited : dataFile.inheritFrom()) {
+                fields.addAll(Arrays.asList(inherited.getDeclaredFields()));
+            }
+        }
+        saveToFile(plugin, objects, clazz, fields);
+    }
+
+    /**
+     * Saves the specified objects to the file specified in the {@link DataFile} annotation.
+     * @param objects The collection of objects to save.
+     * @param plugin The plugin instance.
+     */
+    public static <T> void saveToFile(Collection<T> objects, Plugin plugin) {
+        saveToFile(plugin, objects);
+    }
+
+    private static <T> void saveToFile(Plugin plugin, Collection<T> objects, Class<?> clazz, List<Field> fields) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -310,7 +333,7 @@ public class ConfigManager {
                 try {
                     for (Object object : objects) {
                         String key = "";
-                        for (Field field : clazz.getDeclaredFields()) {
+                        for (Field field : fields) {
                             field.setAccessible(true);
                             if (field.isAnnotationPresent(ObjectKey.class)) key = (String) field.get(object);
                         }
@@ -346,15 +369,6 @@ public class ConfigManager {
         } else {
             throw new RuntimeException("The class " + clazz.getSimpleName() + " does not have a @DataFile annotation!");
         }
-    }
-
-    /**
-     * Saves the specified objects to the file specified in the {@link DataFile} annotation.
-     * @param objects The collection of objects to save.
-     * @param plugin The plugin instance.
-     */
-    public static <T> void saveToFile(Collection<T> objects, Plugin plugin) {
-        saveToFile(plugin, objects);
     }
 
     public static void configFileToClass(Class<?> clazz) {
