@@ -35,7 +35,7 @@ public class ConfigManager {
      * @param clazz The class with the annotated fields.
      * @param <T> The type of the class.
      */
-    public static <T> void saveToFile(Plugin plugin, Class<T> clazz) {
+    public static @Deprecated <T> void saveToFile(Plugin plugin, Class<T> clazz) {
         if (clazz.isAnnotationPresent(DataFile.class)) {
             DataFile dataFile = clazz.getAnnotation(DataFile.class);
             String name = dataFile.value();
@@ -171,7 +171,7 @@ public class ConfigManager {
      * @param plugin The plugin instance.
      * @param <T> The type of the class.
      */
-    public static <T> void saveToFile(Class<T> clazz, Plugin plugin) {
+    public static @Deprecated <T> void saveToFile(Class<T> clazz, Plugin plugin) {
         saveToFile(plugin, clazz);
     }
 
